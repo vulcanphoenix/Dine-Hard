@@ -16,8 +16,8 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 
 [display]
 
-window/size/viewport_width=850
-window/size/viewport_height=850
+window/size/viewport_width=983
+window/size/viewport_height=918
 
 [input]
 
