@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=16 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://world/Tables/New Piskel-1.png.png" id="1_4717r"]
 [ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
 [ext_resource type="Texture2D" uid="uid://bxnowhrju4y8u" path="res://world/Tables/New Piskel-2.png.png" id="2_h5o24"]
 [ext_resource type="Texture2D" uid="uid://cgjwja0uhb8mt" path="res://world/Tables/New Piskel-3.png.png" id="3_mmdvd"]
+[ext_resource type="PackedScene" uid="uid://bsmxgjxgnplyp" path="res://Player/player.tscn" id="5_mmdvd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mmdvd"]
 texture = ExtResource("1_h5o24")
@@ -26,6 +27,50 @@ texture_region_size = Vector2i(5, 5)
 [sub_resource type="TileSet" id="TileSet_mmdvd"]
 tile_size = Vector2i(19, 19)
 sources/3 = SubResource("TileSetAtlasSource_mmdvd")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fn3g3"]
+texture = ExtResource("1_h5o24")
+texture_region_size = Vector2i(5, 5)
+312:5/size_in_atlas = Vector2i(41, 41)
+312:5/0 = 0
+261:5/size_in_atlas = Vector2i(41, 41)
+261:5/0 = 0
+210:5/size_in_atlas = Vector2i(41, 41)
+210:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_sc4t8"]
+tile_size = Vector2i(19, 19)
+sources/0 = SubResource("TileSetAtlasSource_fn3g3")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ai45w"]
+texture = ExtResource("1_h5o24")
+texture_region_size = Vector2i(5, 5)
+210:5/size_in_atlas = Vector2i(41, 41)
+210:5/0 = 0
+261:5/size_in_atlas = Vector2i(41, 41)
+261:5/0 = 0
+159:5/size_in_atlas = Vector2i(41, 41)
+159:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_4papg"]
+tile_size = Vector2i(19, 19)
+sources/0 = SubResource("TileSetAtlasSource_ai45w")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fyhu2"]
+texture = ExtResource("1_h5o24")
+texture_region_size = Vector2i(5, 5)
+261:5/size_in_atlas = Vector2i(41, 41)
+261:5/0 = 0
+210:5/size_in_atlas = Vector2i(41, 41)
+210:5/0 = 0
+56:5/size_in_atlas = Vector2i(41, 41)
+56:5/0 = 0
+108:5/size_in_atlas = Vector2i(40, 41)
+108:5/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ov2xu"]
+tile_size = Vector2i(19, 19)
+sources/0 = SubResource("TileSetAtlasSource_fyhu2")
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fn3g3"]
 animations = [{
@@ -54,28 +99,58 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
+size = Vector2(985, 29)
+
 [node name="World" type="Node2D"]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
-tile_map_data = PackedByteArray("AAAuACoAAwAFAAUAAAAjACoAAwAFAAUAAAAkACoAAwAFAAUAAAAaACoAAwAFAAUAAAAuACAAAwAFAAUAAAAkACAAAwAFAAUAAAAuABYAAwAFAAUAAAAkABYAAwAFAAUAAAAkAAwAAwAFAAUAAAAkAAIAAwAFAAUAAAAlAAUAAwDSAAUAAAAuAAUAAwAFAQUAAAAVAAMAAwA4AQUAAAAWAAMAAwA4AQUAAAA=")
+[node name="Tilemap_Holder" type="Node2D" parent="."]
+
+[node name="Tile floor" type="TileMapLayer" parent="Tilemap_Holder"]
+tile_map_data = PackedByteArray("AAAuACoAAwAFAAUAAAAjACoAAwAFAAUAAAAkACoAAwAFAAUAAAAaACoAAwAFAAUAAAAuACAAAwAFAAUAAAAkACAAAwAFAAUAAAAuABYAAwAFAAUAAAAkABYAAwAFAAUAAAAkAAwAAwAFAAUAAAAuAAwAAwAFAAUAAAA=")
 tile_set = SubResource("TileSet_mmdvd")
 
+[node name="Carpet" type="TileMapLayer" parent="Tilemap_Holder"]
+tile_map_data = PackedByteArray("AAAaAA8AAAA4AQUAAAAQAA8AAAA4AQUAAAAGAA8AAAA4AQUAAAAFAA8AAAA4AQUAAAAaABkAAAA4AQUAAAAaACMAAAA4AQUAAAAQABkAAAA4AQUAAAAGABkAAAA4AQUAAAAFABkAAAA4AQUAAAAFACMAAAA4AQUAAAAQACMAAAA4AQUAAAAMACMAAAA4AQUAAAAFACoAAAA4AQUAAAAQACoAAAA4AQUAAAANACoAAAA4AQUAAAAuAAUAAAAFAQUAAAAaACoAAAA4AQUAAAA=")
+tile_set = SubResource("TileSet_sc4t8")
+
+[node name="Walls" type="TileMapLayer" parent="Tilemap_Holder"]
+tile_map_data = PackedByteArray("AAAuAAUAAAAFAQUAAAAlAAUAAADSAAUAAAAbAAUAAACfAAUAAAARAAUAAACfAAUAAAAHAAUAAACfAAUAAAAFAAUAAACfAAUAAAA=")
+tile_set = SubResource("TileSet_4papg")
+
+[node name="Interactables" type="TileMapLayer" parent="Tilemap_Holder"]
+tile_map_data = PackedByteArray("AAAuAAUAAAAFAQUAAAAlAAUAAADSAAUAAAAuACoAAABsAAUAAAAkACoAAAA4AAUAAAA=")
+tile_set = SubResource("TileSet_ov2xu")
+
 [node name="Table-41" type="Area2D" parent="."]
-position = Vector2(408, 261)
+position = Vector2(409, 256)
 scale = Vector2(1.75, 1.75)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-41"]
+position = Vector2(-162.857, 170.286)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-41"]
+polygon = PackedVector2Array(-223.429, 131.429, -102.286, 131.429, -101.143, 197.143, -225.714, 197.143)
 
 [node name="Table-40" type="Area2D" parent="."]
 position = Vector2(112, 262)
 scale = Vector2(1.75, 1.75)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-40"]
+position = Vector2(5.71428, 53.1429)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-40"]
+polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, 66.2857, 14.8571)
+
+[node name="CollisionHolder" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionHolder"]
+position = Vector2(494.5, 143.5)
+shape = SubResource("RectangleShape2D_mad0u")
+
+[node name="CharacterBody2D" parent="." instance=ExtResource("5_mmdvd")]
+position = Vector2(337, 399)
