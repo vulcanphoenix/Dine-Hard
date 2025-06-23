@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfpox4k6arxtj"
-path="res://.godot/imported/sprite_0.png-10eab8b816a2eee4fbd4ba6ab63de921.ctex"
+uid="uid://n8cphbvfenno"
+path="res://.godot/imported/mafia guy 2.png-0cca83ec2a112255cb18b08ec6dedc99.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/sprite_0.png"
-dest_files=["res://.godot/imported/sprite_0.png-10eab8b816a2eee4fbd4ba6ab63de921.ctex"]
+source_file="res://Sprites/customers/mafia guy 2.png"
+dest_files=["res://.godot/imported/mafia guy 2.png-0cca83ec2a112255cb18b08ec6dedc99.ctex"]
 
 [params]
 

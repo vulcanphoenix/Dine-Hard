@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dg2rkiamm2e3w"
-path="res://.godot/imported/New Piskel-1.png.png-735c5fc95305d13c5691dbfdca869f1b.ctex"
+uid="uid://cfaiprcgrgtdk"
+path="res://.godot/imported/Jeans_Belt.png-cf389ecff87deef960febec5eb172e0d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/Tables/New Piskel-1.png.png"
-dest_files=["res://.godot/imported/New Piskel-1.png.png-735c5fc95305d13c5691dbfdca869f1b.ctex"]
+source_file="res://Sprites/customers/Sprite-Sheets/Player-Clothes/Jeans_Belt.png"
+dest_files=["res://.godot/imported/Jeans_Belt.png-cf389ecff87deef960febec5eb172e0d.ctex"]
 
 [params]
 

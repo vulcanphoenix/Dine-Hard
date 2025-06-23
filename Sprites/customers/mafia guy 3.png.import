@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bih7lhv6krtd5"
-path="res://.godot/imported/New Piskel (1) (6).png-8a530705505fbe48a77589e89e05fd85.ctex"
+uid="uid://dq0jjhhtdiec"
+path="res://.godot/imported/mafia guy 3.png-9be8e6c3a57e59457096b89c4af5061d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/Tiles/New Piskel (1) (6).png"
-dest_files=["res://.godot/imported/New Piskel (1) (6).png-8a530705505fbe48a77589e89e05fd85.ctex"]
+source_file="res://Sprites/customers/mafia guy 3.png"
+dest_files=["res://.godot/imported/mafia guy 3.png-9be8e6c3a57e59457096b89c4af5061d.ctex"]
 
 [params]
 

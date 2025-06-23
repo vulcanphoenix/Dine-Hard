@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bxnowhrju4y8u"
-path="res://.godot/imported/New Piskel-2.png.png-90943611272d870a0500d41b02fdae54.ctex"
+uid="uid://f37r0h6b1aq7"
+path="res://.godot/imported/TankTop_Idle.png-192dd72bc3869cffca7e8de9259007d0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://world/Tables/New Piskel-2.png.png"
-dest_files=["res://.godot/imported/New Piskel-2.png.png-90943611272d870a0500d41b02fdae54.ctex"]
+source_file="res://Sprites/customers/Sprite-Sheets/Player-Clothes/TankTop_Idle.png"
+dest_files=["res://.godot/imported/TankTop_Idle.png-192dd72bc3869cffca7e8de9259007d0.ctex"]
 
 [params]
 

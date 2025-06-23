@@ -1,13 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://bsmxgjxgnplyp"]
+[gd_scene load_steps=4 format=3 uid="uid://b2w8lm5xe01w"]
 
-[ext_resource type="Texture2D" uid="uid://cfpox4k6arxtj" path="res://Sprites/sprite_0.png" id="1_l8h54"]
-[ext_resource type="Script" uid="uid://dkfkm8reeehmf" path="res://Player/player.gd" id="2_4ntmi"]
+[ext_resource type="Texture2D" uid="uid://cfpox4k6arxtj" path="res://Sprites/player/sprite_0.png" id="1_aaof1"]
+
+[sub_resource type="GDScript" id="GDScript_db72c"]
+script/source = "extends CharacterBody2D
+var speed = 400
+func _physics_process(delta):
+	var direction = Input.get_vector( \"left\", \"right\", \"up\", \"down\")
+	velocity = direction * speed
+	
+	move_and_slide()
+"
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4ntmi"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_l8h54")
+"texture": ExtResource("1_aaof1")
 }],
 "loop": true,
 "name": &"default",
@@ -15,8 +24,7 @@ animations = [{
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D"]
-position = Vector2(610, 331)
-script = ExtResource("2_4ntmi")
+script = SubResource("GDScript_db72c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -1)

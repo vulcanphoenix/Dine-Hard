@@ -1,10 +1,9 @@
-[gd_scene load_steps=16 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=15 format=4 uid="uid://bbpoj0lm0sg5p"]
 
-[ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://world/Tables/New Piskel-1.png.png" id="1_4717r"]
-[ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
-[ext_resource type="Texture2D" uid="uid://bxnowhrju4y8u" path="res://world/Tables/New Piskel-2.png.png" id="2_h5o24"]
-[ext_resource type="Texture2D" uid="uid://cgjwja0uhb8mt" path="res://world/Tables/New Piskel-3.png.png" id="3_mmdvd"]
-[ext_resource type="PackedScene" uid="uid://bsmxgjxgnplyp" path="res://Player/player.tscn" id="5_mmdvd"]
+[ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
+[ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://Sprites/world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
+[ext_resource type="Texture2D" uid="uid://bxnowhrju4y8u" path="res://Sprites/world/Tables/New Piskel-2.png.png" id="2_h5o24"]
+[ext_resource type="Texture2D" uid="uid://cgjwja0uhb8mt" path="res://Sprites/world/Tables/New Piskel-3.png.png" id="3_mmdvd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mmdvd"]
 texture = ExtResource("1_h5o24")
@@ -122,35 +121,46 @@ tile_set = SubResource("TileSet_4papg")
 tile_map_data = PackedByteArray("AAAuAAUAAAAFAQUAAAAlAAUAAADSAAUAAAAuACoAAABsAAUAAAAkACoAAAA4AAUAAAA=")
 tile_set = SubResource("TileSet_ov2xu")
 
-[node name="Table-41" type="Area2D" parent="."]
-position = Vector2(409, 256)
+[node name="Table-41" type="StaticBody2D" parent="."]
+position = Vector2(112, 262)
 scale = Vector2(1.75, 1.75)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-41"]
-position = Vector2(-162.857, 170.286)
+position = Vector2(6.8573, 166.857)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-41"]
+position = Vector2(169.714, -3.42857)
 polygon = PackedVector2Array(-223.429, 131.429, -102.286, 131.429, -101.143, 197.143, -225.714, 197.143)
 
-[node name="Table-40" type="Area2D" parent="."]
+[node name="Table-40" type="StaticBody2D" parent="."]
 position = Vector2(112, 262)
 scale = Vector2(1.75, 1.75)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-40"]
-position = Vector2(5.71428, 53.1429)
+position = Vector2(5.71429, 53.1429)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-40"]
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, 66.2857, 14.8571)
 
-[node name="CollisionHolder" type="Area2D" parent="."]
+[node name="North Wall Collision" type="StaticBody2D" parent="."]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionHolder"]
+[node name="North wall" type="CollisionShape2D" parent="North Wall Collision"]
 position = Vector2(494.5, 143.5)
 shape = SubResource("RectangleShape2D_mad0u")
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("5_mmdvd")]
-position = Vector2(337, 399)
+[node name="CharacterBody2D" parent="."]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+process_physics_priority = 0
+process_thread_group = 0
+physics_interpolation_mode = 0
+auto_translate_mode = 0
+editor_description = ""
+position = Vector2(468, 386)
+script = null
