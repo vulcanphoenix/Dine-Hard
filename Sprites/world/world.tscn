@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=16 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
 [ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://Sprites/world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
 [ext_resource type="Texture2D" uid="uid://bxnowhrju4y8u" path="res://Sprites/world/Tables/New Piskel-2.png.png" id="2_h5o24"]
 [ext_resource type="Texture2D" uid="uid://cgjwja0uhb8mt" path="res://Sprites/world/Tables/New Piskel-3.png.png" id="3_mmdvd"]
+[ext_resource type="PackedScene" uid="uid://b2w8lm5xe01w" path="res://Sprites/player/player.tscn" id="5_tat8m"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mmdvd"]
 texture = ExtResource("1_h5o24")
@@ -152,15 +153,5 @@ polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, 
 position = Vector2(494.5, 143.5)
 shape = SubResource("RectangleShape2D_mad0u")
 
-[node name="CharacterBody2D" parent="."]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-position = Vector2(468, 386)
-script = null
+[node name="CharacterBody2D" parent="." instance=ExtResource("5_tat8m")]
+position = Vector2(421, 573)

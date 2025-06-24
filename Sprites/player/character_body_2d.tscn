@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2ywnuwl8h2ll"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_03i30"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 3.0
+}]
+
+[node name="CharacterBody2D" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(4.01135, 3.97125)
+sprite_frames = SubResource("SpriteFrames_03i30")
+frame_progress = 0.8104
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]

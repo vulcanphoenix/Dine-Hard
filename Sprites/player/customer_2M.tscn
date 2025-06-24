@@ -1,0 +1,119 @@
+[gd_scene load_steps=17 format=3 uid="uid://cfvbwl2ahfvx7"]
+
+[ext_resource type="Texture2D" uid="uid://n8cphbvfenno" path="res://Sprites/customers/mafia guy 2.png" id="1_flb6x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_flb6x"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vnc8i"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(0, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6qswo"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(64, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_apc0s"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(128, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sdy6x"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(192, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8dvsc"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(256, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w205l"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(320, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j5p6l"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(384, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5v07x"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(448, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gemid"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(512, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t2wih"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(576, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuyc4"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(640, 256, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pym4a"]
+atlas = ExtResource("1_flb6x")
+region = Rect2(0, 320, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vm4sx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_flb6x")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vnc8i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6qswo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_apc0s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sdy6x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8dvsc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w205l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j5p6l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5v07x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gemid")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t2wih")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuyc4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pym4a")
+}],
+"loop": true,
+"name": &"Walking",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_msllt"]
+radius = 5.0
+
+[node name="Customer2M" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vm4sx")
+animation = &"Walking"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_msllt")
