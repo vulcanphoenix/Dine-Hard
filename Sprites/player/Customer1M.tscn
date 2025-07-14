@@ -106,7 +106,7 @@ height = 124.0
 [node name="Customer1M" type="CharacterBody2D"]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(4.01135, 3.97125)
+scale = Vector2(3.511, 3.476)
 sprite_frames = SubResource("SpriteFrames_200q6")
 animation = &"Idle"
 
