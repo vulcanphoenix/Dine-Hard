@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=22 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
 [ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://Sprites/world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
@@ -104,6 +104,18 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
 size = Vector2(985, 29)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3sxfg"]
+size = Vector2(138, 151.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lpn8e"]
+size = Vector2(20, 752)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8nwcd"]
+size = Vector2(980, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q4n3e"]
+size = Vector2(15, 752.5)
+
 [node name="World" type="Node2D"]
 
 [node name="Tilemap_Holder" type="Node2D" parent="."]
@@ -156,7 +168,7 @@ position = Vector2(494.5, 143.5)
 shape = SubResource("RectangleShape2D_mad0u")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("5_tat8m")]
-position = Vector2(421, 573)
+position = Vector2(530, 603)
 
 [node name="Customer Spawn" type="Node2D" parent="."]
 script = ExtResource("6_is8iy")
@@ -164,4 +176,26 @@ npc_scene = ExtResource("7_3sxfg")
 max_npcs = 4
 
 [node name="spawn_point _1" type="Marker2D" parent="Customer Spawn"]
-position = Vector2(942, 854)
+position = Vector2(942, 839)
+
+[node name="Collision holder" type="Node2D" parent="."]
+
+[node name="CounterTop" type="StaticBody2D" parent="Collision holder"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/CounterTop"]
+position = Vector2(662, 834.75)
+shape = SubResource("RectangleShape2D_3sxfg")
+
+[node name="walls" type="StaticBody2D" parent="Collision holder"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/walls"]
+position = Vector2(-7, 534)
+shape = SubResource("RectangleShape2D_lpn8e")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Collision holder/walls"]
+position = Vector2(493, 919)
+shape = SubResource("RectangleShape2D_8nwcd")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Collision holder/walls"]
+position = Vector2(991, 533)
+shape = SubResource("RectangleShape2D_q4n3e")
