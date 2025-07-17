@@ -1,8 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://bamjgdqvuv67b"]
+[gd_scene load_steps=18 format=3 uid="uid://bamjgdqvuv67b"]
 
 [ext_resource type="Texture2D" uid="uid://dbieeam0m5lo0" path="res://Sprites/customers/mafia guy 1.png" id="1_8aq1w"]
-
-[sub_resource type="Curve2D" id="Curve2D_8aq1w"]
+[ext_resource type="Script" uid="uid://600waawf1d8c" path="res://Sprites/player/customer_1m.gd" id="1_r3shs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_b1wsq"]
 atlas = ExtResource("1_8aq1w")
@@ -105,17 +104,25 @@ animations = [{
 radius = 23.0
 height = 124.0
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y3moo"]
+radius = 31.0
+height = 138.0
+
 [node name="Customer1M" type="CharacterBody2D"]
+script = ExtResource("1_r3shs")
 
-[node name="Path2D" type="Path2D" parent="."]
-curve = SubResource("Curve2D_8aq1w")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Path2D"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3.511, 3.476)
 sprite_frames = SubResource("SpriteFrames_200q6")
 animation = &"walk"
 autoplay = "walk"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-5, 5)
 shape = SubResource("CapsuleShape2D_1ms5y")
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+position = Vector2(-5, 5)
+shape = SubResource("CapsuleShape2D_y3moo")

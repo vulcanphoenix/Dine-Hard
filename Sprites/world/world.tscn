@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=23 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
 [ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://Sprites/world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
@@ -101,6 +101,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6pm3g"]
+size = Vector2(255, 171)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
 size = Vector2(985, 29)
 
@@ -160,6 +163,16 @@ animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-40"]
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, 66.2857, 14.8571)
+
+[node name="player interact" type="Area2D" parent="Table-40"]
+position = Vector2(-64, -149.714)
+scale = Vector2(0.571429, 0.571429)
+
+[node name="player interact" type="CollisionShape2D" parent="Table-40/player interact"]
+light_mask = 0
+position = Vector2(140.5, 374.5)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_6pm3g")
 
 [node name="North Wall Collision" type="StaticBody2D" parent="."]
 
