@@ -142,7 +142,8 @@ height = 20.0
 [node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_0qg6l")
 animation = &"Dress walking"
-frame_progress = 0.836397
+frame_progress = 0.81529
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CapsuleShape2D_r3wgx")

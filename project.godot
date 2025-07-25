@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Dine Hard"
-run/main_scene="uid://bbpoj0lm0sg5p"
+run/main_scene="uid://cwdgdukwo147c"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
 [display]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=22 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
 [ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://Sprites/world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
@@ -107,9 +107,6 @@ size = Vector2(255, 171)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
 size = Vector2(985, 29)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3sxfg"]
-size = Vector2(138, 151.5)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lpn8e"]
 size = Vector2(20, 752)
 
@@ -144,16 +141,16 @@ position = Vector2(112, 262)
 scale = Vector2(1.75, 1.75)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-41"]
-position = Vector2(6.8573, 166.857)
+position = Vector2(5.14286, 138.857)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-41"]
-position = Vector2(169.714, -3.42857)
-polygon = PackedVector2Array(-223.429, 131.429, -102.286, 131.429, -101.143, 197.143, -225.714, 197.143)
+position = Vector2(168, -31.4286)
+polygon = PackedVector2Array(-223.429, 131.429, -224, 119.429, -218.857, 118.857, -218.285, 132, -109.714, 132, -108.571, 118.857, -102.857, 118.857, -102.286, 131.429, -101.143, 197.143, -225.714, 197.143)
 
 [node name="Table-40" type="StaticBody2D" parent="."]
-position = Vector2(112, 262)
+position = Vector2(109, 213)
 scale = Vector2(1.75, 1.75)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-40"]
@@ -162,7 +159,7 @@ sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-40"]
-polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, 66.2857, 14.8571)
+polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
 [node name="player interact" type="Area2D" parent="Table-40"]
 position = Vector2(-64, -149.714)
@@ -170,8 +167,7 @@ scale = Vector2(0.571429, 0.571429)
 
 [node name="player interact" type="CollisionShape2D" parent="Table-40/player interact"]
 light_mask = 0
-position = Vector2(140.5, 374.5)
-scale = Vector2(1, 1)
+position = Vector2(133, 368.999)
 shape = SubResource("RectangleShape2D_6pm3g")
 
 [node name="North Wall Collision" type="StaticBody2D" parent="."]
@@ -181,12 +177,10 @@ position = Vector2(494.5, 143.5)
 shape = SubResource("RectangleShape2D_mad0u")
 
 [node name="CharacterBody2D" parent="." instance=ExtResource("5_tat8m")]
-position = Vector2(530, 603)
+position = Vector2(644, 833)
 
 [node name="Customer Spawn" type="Node2D" parent="."]
 script = ExtResource("6_is8iy")
-npc_scene = ExtResource("7_3sxfg")
-max_npcs = 4
 
 [node name="spawn_point _1" type="Marker2D" parent="Customer Spawn"]
 position = Vector2(942, 839)
@@ -195,9 +189,8 @@ position = Vector2(942, 839)
 
 [node name="CounterTop" type="StaticBody2D" parent="Collision holder"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/CounterTop"]
-position = Vector2(662, 834.75)
-shape = SubResource("RectangleShape2D_3sxfg")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collision holder/CounterTop"]
+polygon = PackedVector2Array(687, 907, 687, 804, 594, 804, 595, 754, 708, 754, 721, 758, 727, 763, 732, 775, 737, 789, 739, 909)
 
 [node name="walls" type="StaticBody2D" parent="Collision holder"]
 
@@ -212,3 +205,6 @@ shape = SubResource("RectangleShape2D_8nwcd")
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Collision holder/walls"]
 position = Vector2(991, 533)
 shape = SubResource("RectangleShape2D_q4n3e")
+
+[node name="Customer1M" parent="." instance=ExtResource("7_3sxfg")]
+position = Vector2(939, 838)

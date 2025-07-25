@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwdgdukwo147c"]
+
+[ext_resource type="Script" uid="uid://d2n0wfxb7tfcw" path="res://title_screen.gd" id="1_ak2if"]
+[ext_resource type="Texture2D" uid="uid://br0n6prs5fvbp" path="res://Sprites/world/Dine_Hard_Title_Stretched_630x500.png" id="2_ak2if"]
+[ext_resource type="Script" uid="uid://d1ik8u3sixsw3" path="res://start.gd" id="3_ig5kc"]
+[ext_resource type="Script" uid="uid://cgsd57moh53xk" path="res://quit.gd" id="4_05l2w"]
+
+[node name="Title Screen" type="Node2D"]
+script = ExtResource("1_ak2if")
+
+[node name="ChatGptImageJul18,2025,011655Pm" type="Sprite2D" parent="."]
+position = Vector2(490, 460)
+scale = Vector2(1.55079, 1.834)
+texture = ExtResource("2_ak2if")
+
+[node name="Start" type="Button" parent="."]
+offset_left = 377.0
+offset_top = 569.0
+offset_right = 590.0
+offset_bottom = 635.0
+theme_override_font_sizes/font_size = 32
+text = "Start"
+script = ExtResource("3_ig5kc")
+
+[node name="Settings" type="Button" parent="."]
+offset_left = 389.0
+offset_top = 649.0
+offset_right = 580.0
+offset_bottom = 708.0
+theme_override_font_sizes/font_size = 32
+text = "Settings
+"
+
+[node name="Quit" type="Button" parent="."]
+offset_left = 396.0
+offset_top = 719.0
+offset_right = 573.0
+offset_bottom = 768.0
+text = "Quit
+"
+script = ExtResource("4_05l2w")
+
+[connection signal="pressed" from="Start" to="Start" method="_on_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
