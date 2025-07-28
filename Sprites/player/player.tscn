@@ -28,7 +28,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["player"]]
 script = SubResource("GDScript_db72c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

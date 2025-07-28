@@ -105,17 +105,17 @@ radius = 23.0
 height = 124.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y3moo"]
-radius = 32.0
-height = 140.0
+radius = 37.0
+height = 150.0
 
-[node name="Customer1M" type="CharacterBody2D"]
+[node name="Customer" type="CharacterBody2D"]
 script = ExtResource("1_r3shs")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(3.511, 3.476)
 sprite_frames = SubResource("SpriteFrames_200q6")
-animation = &"walk"
-autoplay = "walk"
+animation = &"idle"
+autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-5, 5)
@@ -127,3 +127,29 @@ monitorable = false
 [node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
 position = Vector2(-5, 5)
 shape = SubResource("CapsuleShape2D_y3moo")
+
+[node name="InteractionPrompt" type="Label" parent="."]
+offset_left = -56.0
+offset_top = -66.0
+offset_right = 56.0
+offset_bottom = -43.0
+text = "Press E to Interact"
+
+[node name="DialogueUI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DialogueBox" type="ColorRect" parent="DialogueUI"]
+layout_mode = 0
+offset_left = -194.0
+offset_top = -154.0
+offset_right = 188.0
+offset_bottom = -83.0
+color = Color(0, 0, 0, 0.368627)
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
