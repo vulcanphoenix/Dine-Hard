@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 # Restaurant Customer NPC with In-Game Dialogue UI
+# This script goes on the root node of the NPC scene file
 
 @export var customer_name: String = "Mrs. Anderson"
 @export var dialogue_lines: Array[String] = [
@@ -17,7 +18,7 @@ var has_ordered = false
 
 @onready var interaction_area = $InteractionArea
 @onready var interaction_prompt = $InteractionPrompt
-@onready var dialogue_ui = $DialogueUI
+@onready var dialogue_ui = get_tree().current_scene.get_node_or_null("DialogueUI")
 
 func _ready():
 	# Connect the interaction area signals
@@ -27,8 +28,14 @@ func _ready():
 	# Hide UI elements initially
 	if interaction_prompt:
 		interaction_prompt.visible = false
+	
+	# Find dialogue UI and hide it
+	if not dialogue_ui:
+		dialogue_ui = get_tree().get_first_node_in_group("dialogue_ui")
 	if dialogue_ui:
 		dialogue_ui.visible = false
+	else:
+		print("WARNING: DialogueUI not found! Make sure it's in the 'dialogue_ui' group.")
 
 func _input(event):
 	# Check for interaction input when player is in range
@@ -73,17 +80,27 @@ func next_dialogue_line():
 		display_dialogue()
 
 func display_dialogue():
-	if dialogue_ui:
-		var name_label = dialogue_ui.get_node("DialogueBox/NameLabel")
-		var text_label = dialogue_ui.get_node("DialogueBox/DialogueText")
-		var continue_label = dialogue_ui.get_node("DialogueBox/ContinuePrompt")
+	if not dialogue_ui:
+		print("ERROR: No DialogueUI found!")
+		return
 		
-		if name_label:
-			name_label.text = customer_name
-		if text_label:
-			text_label.text = dialogue_lines[current_dialogue_index]
-		if continue_label:
-			continue_label.text = "Press E to continue..."
+	var name_label = dialogue_ui.get_node_or_null("DialogueBox/NameLabel")
+	var text_label = dialogue_ui.get_node_or_null("DialogueBox/DialogueText") 
+	var continue_label = dialogue_ui.get_node_or_null("DialogueBox/ContinuePrompt")
+	
+	if not name_label:
+		print("ERROR: NameLabel not found at DialogueBox/NameLabel")
+	if not text_label:
+		print("ERROR: DialogueText not found at DialogueBox/DialogueText")
+	if not continue_label:
+		print("ERROR: ContinuePrompt not found at DialogueBox/ContinuePrompt")
+	
+	if name_label:
+		name_label.text = customer_name
+	if text_label:
+		text_label.text = dialogue_lines[current_dialogue_index]
+	if continue_label:
+		continue_label.text = "Press E to continue..."
 
 func show_dialogue_ui():
 	if dialogue_ui:

@@ -1,8 +1,10 @@
-[gd_scene load_steps=22 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=24 format=4 uid="uid://bbpoj0lm0sg5p"]
 
+[ext_resource type="Script" uid="uid://cc4lsf3xrr25m" path="res://Sprites/world/world.gd" id="1_8nwcd"]
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
 [ext_resource type="Texture2D" uid="uid://bih7lhv6krtd5" path="res://Sprites/world/Tiles/New Piskel (1) (6).png" id="1_h5o24"]
 [ext_resource type="Texture2D" uid="uid://bxnowhrju4y8u" path="res://Sprites/world/Tables/New Piskel-2.png.png" id="2_h5o24"]
+[ext_resource type="Script" uid="uid://cpeg3ajgpws2l" path="res://Sprites/world/restaurant_table.gd" id="2_lpn8e"]
 [ext_resource type="Texture2D" uid="uid://cgjwja0uhb8mt" path="res://Sprites/world/Tables/New Piskel-3.png.png" id="3_mmdvd"]
 [ext_resource type="PackedScene" uid="uid://b2w8lm5xe01w" path="res://Sprites/player/player.tscn" id="5_tat8m"]
 [ext_resource type="Script" uid="uid://blkt0xrfjgqyp" path="res://Sprites/world/customer_spawn.gd" id="6_is8iy"]
@@ -102,10 +104,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6pm3g"]
-size = Vector2(255, 171)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
-size = Vector2(985, 29)
+size = Vector2(268.5, 171)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lpn8e"]
 size = Vector2(20, 752)
@@ -116,7 +115,11 @@ size = Vector2(980, 18)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q4n3e"]
 size = Vector2(15, 752.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
+size = Vector2(985, 29)
+
 [node name="World" type="Node2D"]
+script = ExtResource("1_8nwcd")
 
 [node name="Tilemap_Holder" type="Node2D" parent="."]
 
@@ -136,47 +139,39 @@ tile_set = SubResource("TileSet_4papg")
 tile_map_data = PackedByteArray("AAAuAAUAAAAFAQUAAAAlAAUAAADSAAUAAAAuACoAAABsAAUAAAAkACoAAAA4AAUAAAA=")
 tile_set = SubResource("TileSet_ov2xu")
 
-[node name="Table-41" type="StaticBody2D" parent="."]
-position = Vector2(112, 262)
-scale = Vector2(1.75, 1.75)
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-41"]
-position = Vector2(5.14286, 138.857)
-sprite_frames = SubResource("SpriteFrames_fn3g3")
-animation = &"clean_table"
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-41"]
-position = Vector2(168, -31.4286)
-polygon = PackedVector2Array(-223.429, 131.429, -224, 119.429, -218.857, 118.857, -218.285, 132, -109.714, 132, -108.571, 118.857, -102.857, 118.857, -102.286, 131.429, -101.143, 197.143, -225.714, 197.143)
-
-[node name="Table-40" type="StaticBody2D" parent="."]
+[node name="RestaurantTable" type="StaticBody2D" parent="."]
 position = Vector2(109, 213)
 scale = Vector2(1.75, 1.75)
+script = ExtResource("2_lpn8e")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Table-40"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable"]
 position = Vector2(5.71429, 53.1429)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Table-40"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable"]
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
-[node name="player interact" type="Area2D" parent="Table-40"]
+[node name="InteractionArea" type="Area2D" parent="RestaurantTable"]
 position = Vector2(-64, -149.714)
 scale = Vector2(0.571429, 0.571429)
 
-[node name="player interact" type="CollisionShape2D" parent="Table-40/player interact"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestaurantTable/InteractionArea"]
 light_mask = 0
-position = Vector2(133, 368.999)
+position = Vector2(139.75, 368.999)
 shape = SubResource("RectangleShape2D_6pm3g")
 
-[node name="North Wall Collision" type="StaticBody2D" parent="."]
+[node name="InteractionPrompt" type="Label" parent="RestaurantTable"]
+offset_left = -37.1429
+offset_top = 34.2857
+offset_right = 57.8571
+offset_bottom = 51.2857
+theme_override_font_sizes/font_size = 10
+text = "Press E to Interact"
 
-[node name="North wall" type="CollisionShape2D" parent="North Wall Collision"]
-position = Vector2(494.5, 143.5)
-shape = SubResource("RectangleShape2D_mad0u")
+[node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable"]
 
-[node name="CharacterBody2D" parent="." instance=ExtResource("5_tat8m")]
+[node name="player" parent="." instance=ExtResource("5_tat8m")]
 position = Vector2(644, 833)
 
 [node name="Customer Spawn" type="Node2D" parent="."]
@@ -206,5 +201,53 @@ shape = SubResource("RectangleShape2D_8nwcd")
 position = Vector2(991, 533)
 shape = SubResource("RectangleShape2D_q4n3e")
 
+[node name="North Wall Collision" type="StaticBody2D" parent="Collision holder"]
+
+[node name="North wall" type="CollisionShape2D" parent="Collision holder/North Wall Collision"]
+position = Vector2(494.5, 143.5)
+shape = SubResource("RectangleShape2D_mad0u")
+
+[node name="DialogueUI" type="Control" parent="." groups=["dialogue_ui"]]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DialogueBox" type="ColorRect" parent="DialogueUI"]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 823.0
+offset_right = 826.0
+offset_bottom = 912.0
+color = Color(0, 0, 0, 0.368627)
+
+[node name="NameLabel" type="Label" parent="DialogueUI/DialogueBox"]
+layout_mode = 0
+offset_left = 287.0
+offset_top = 2.0
+offset_right = 425.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="DialogueText" type="Label" parent="DialogueUI/DialogueBox"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 33.0
+offset_right = 673.0
+offset_bottom = 69.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+
+[node name="ContinuePrompt" type="Label" parent="DialogueUI/DialogueBox"]
+layout_mode = 0
+offset_left = -1.0
+offset_top = 65.0
+offset_right = 95.0
+offset_bottom = 88.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "
+"
+
 [node name="Customer" parent="." instance=ExtResource("7_3sxfg")]
-position = Vector2(926, 834)
+position = Vector2(945, 836)
