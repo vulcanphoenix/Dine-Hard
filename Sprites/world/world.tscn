@@ -118,7 +118,7 @@ size = Vector2(15, 752.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mad0u"]
 size = Vector2(985, 29)
 
-[node name="World" type="Node2D"]
+[node name="World" type="Node2D" groups=["customers"]]
 script = ExtResource("1_8nwcd")
 
 [node name="Tilemap_Holder" type="Node2D" parent="."]
@@ -170,6 +170,7 @@ theme_override_font_sizes/font_size = 10
 text = "Press E to Interact"
 
 [node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable"]
+position = Vector2(51.4286, 71.4286)
 
 [node name="player" parent="." instance=ExtResource("5_tat8m")]
 position = Vector2(644, 833)

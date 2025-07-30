@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-# Restaurant Customer NPC with In-Game Dialogue UI
+# Restaurant Customer NPC with In-Game Dialogue UI and Table System
 # This script goes on the root node of the NPC scene file
 
 @export var customer_name: String = "Mrs. Anderson"
@@ -15,12 +15,28 @@ var player_in_range = false
 var current_dialogue_index = 0
 var is_talking = false
 var has_ordered = false
+var ready_for_seating = false
+var assigned_table = null
 
 @onready var interaction_area = $InteractionArea
 @onready var interaction_prompt = $InteractionPrompt
 @onready var dialogue_ui = get_tree().current_scene.get_node_or_null("DialogueUI")
 
 func _ready():
+	print("DEBUG: Customer _ready() called for: " + customer_name)
+	
+	# Add to customers group so tables can find this customer
+	add_to_group("customers")
+	print("DEBUG: Customer " + customer_name + " added to customers group")
+	
+	# Verify it was added
+	await get_tree().process_frame  # Wait one frame
+	var customers_in_group = get_tree().get_nodes_in_group("customers")
+	print("DEBUG: Total customers in group after adding: " + str(customers_in_group.size()))
+	for customer in customers_in_group:
+		if customer.has_method("get") and "customer_name" in customer:
+			print("DEBUG: Customer in group: " + str(customer.customer_name))
+	
 	# Connect the interaction area signals
 	interaction_area.body_entered.connect(_on_interaction_area_entered)
 	interaction_area.body_exited.connect(_on_interaction_area_exited)
@@ -31,11 +47,11 @@ func _ready():
 	
 	# Find dialogue UI and hide it
 	if not dialogue_ui:
-		dialogue_ui = get_tree().get_first_node_in_group("dialogue_ui")
+		dialogue_ui = get_tree().current_scene.get_node_or_null("DialogueUI")
 	if dialogue_ui:
 		dialogue_ui.visible = false
 	else:
-		print("WARNING: DialogueUI not found! Make sure it's in the 'dialogue_ui' group.")
+		print("WARNING: DialogueUI not found! Make sure it exists in the main scene.")
 
 func _input(event):
 	# Check for interaction input when player is in range
@@ -119,21 +135,34 @@ func end_dialogue():
 
 func complete_order():
 	has_ordered = true
+	ready_for_seating = true  # Customer is now ready to be seated
 	hide_interaction_prompt()
 	
 	# Show completion message briefly
 	if dialogue_ui:
-		var name_label = dialogue_ui.get_node("DialogueBox/NameLabel")
-		var text_label = dialogue_ui.get_node("DialogueBox/DialogueText")
-		var continue_label = dialogue_ui.get_node("DialogueBox/ContinuePrompt")
+		var name_label = dialogue_ui.get_node_or_null("DialogueBox/NameLabel")
+		var text_label = dialogue_ui.get_node_or_null("DialogueBox/DialogueText")
+		var continue_label = dialogue_ui.get_node_or_null("DialogueBox/ContinuePrompt")
 		
 		if name_label:
 			name_label.text = customer_name
 		if text_label:
-			text_label.text = "*Order completed* Thank you for the excellent service!"
+			text_label.text = "*Order taken* Please show me to my table!"
 		if continue_label:
 			continue_label.text = ""
 		
 		# Hide dialogue after 2 seconds
 		await get_tree().create_timer(2.0).timeout
 		hide_dialogue_ui()
+
+# New functions for table system
+func is_ready_for_seating() -> bool:
+	var ready = ready_for_seating and assigned_table == null
+	print("DEBUG: Customer " + customer_name + " ready for seating: " + str(ready))
+	print("DEBUG: ready_for_seating = " + str(ready_for_seating) + ", assigned_table = " + str(assigned_table))
+	return ready
+
+func assign_to_table(table):
+	assigned_table = table
+	ready_for_seating = false
+	print("Customer " + customer_name + " is being seated at table " + str(table.table_number))

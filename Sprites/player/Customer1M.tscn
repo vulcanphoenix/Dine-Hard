@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://bamjgdqvuv67b"]
+[gd_scene load_steps=19 format=3 uid="uid://bamjgdqvuv67b"]
 
 [ext_resource type="Texture2D" uid="uid://dbieeam0m5lo0" path="res://Sprites/customers/mafia guy 1.png" id="1_8aq1w"]
 [ext_resource type="Script" uid="uid://600waawf1d8c" path="res://Sprites/player/customer_1m.gd" id="1_r3shs"]
+[ext_resource type="Texture2D" uid="uid://cultns3gnsb60" path="res://Sprites/world/mafia guy 1 (1).png" id="2_y3moo"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_b1wsq"]
-atlas = ExtResource("1_8aq1w")
+[sub_resource type="AtlasTexture" id="AtlasTexture_wmj76"]
+atlas = ExtResource("2_y3moo")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1ms5y"]
@@ -55,7 +56,7 @@ region = Rect2(640, 256, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_b1wsq")
+"texture": SubResource("AtlasTexture_wmj76")
 }],
 "loop": true,
 "name": &"idle",

@@ -47,19 +47,41 @@ func hide_interaction_prompt():
 		interaction_prompt.visible = false
 
 func seat_waiting_customer():
-	# Find a customer that has been talked to but not seated
+	# Find customers by group first
 	var customers = get_tree().get_nodes_in_group("customers")
 	print("DEBUG: Found " + str(customers.size()) + " customers in group")
+	
+	# If group is empty, try scene traversal as backup
+	if customers.size() == 0:
+		print("DEBUG: Searching for customers by traversing scene tree...")
+		customers = find_all_customers(get_tree().current_scene)
+		print("DEBUG: Found " + str(customers.size()) + " customers by scene traversal")
 	
 	var customer_to_seat = null
 	
 	for customer in customers:
-		print("DEBUG: Checking customer " + customer.customer_name)
-		print("DEBUG: Has is_ready_for_seating method: " + str(customer.has_method("is_ready_for_seating")))
-		if customer.has_method("is_ready_for_seating"):
-			print("DEBUG: Customer ready for seating: " + str(customer.is_ready_for_seating()))
+		# Safely check if customer has the required properties and methods
+		if not customer.has_method("is_ready_for_seating"):
+			print("DEBUG: Customer doesn't have is_ready_for_seating method")
+			continue
+			
+		var customer_name = "Unknown"
+		if "customer_name" in customer:
+			customer_name = customer.customer_name
 		
-		if customer.has_method("is_ready_for_seating") and customer.is_ready_for_seating():
+		print("DEBUG: Checking customer " + customer_name)
+		
+		# Check the customer's internal state
+		if "ready_for_seating" in customer:
+			print("DEBUG: ready_for_seating = " + str(customer.ready_for_seating))
+		if "has_ordered" in customer:
+			print("DEBUG: has_ordered = " + str(customer.has_ordered))
+		if "assigned_table" in customer:
+			print("DEBUG: assigned_table = " + str(customer.assigned_table))
+		
+		print("DEBUG: Customer ready for seating: " + str(customer.is_ready_for_seating()))
+		
+		if customer.is_ready_for_seating():
 			customer_to_seat = customer
 			break
 	
@@ -68,6 +90,19 @@ func seat_waiting_customer():
 		move_customer_to_table(customer_to_seat)
 	else:
 		print("No customers waiting to be seated!")
+
+func find_all_customers(node):
+	var customers = []
+	
+	# Check if this node is a customer (has customer_name property)
+	if node.has_method("get") and "customer_name" in node and node.customer_name != "":
+		customers.append(node)
+	
+	# Check all children recursively
+	for child in node.get_children():
+		customers.append_array(find_all_customers(child))
+	
+	return customers
 
 func assign_customer(customer: CharacterBody2D):
 	assigned_customer = customer
