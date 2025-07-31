@@ -120,13 +120,13 @@ func move_customer_to_table(customer: CharacterBody2D):
 		print("Warning: No CustomerSeatPosition marker found!")
 		return
 	
-	# Move customer to the table
+	# Tell customer to walk to the table
 	var target_position = customer_seat_position.global_position
 	
-	# Simple movement - you could make this more sophisticated
-	var tween = create_tween()
-	tween.tween_property(customer, "global_position", target_position, 2.0)
-	tween.tween_callback(func(): customer_seated())
+	if customer.has_method("walk_to_table"):
+		customer.walk_to_table(target_position)
+	else:
+		print("Error: Customer doesn't have walk_to_table method!")
 
 func customer_seated():
 	print("Customer " + assigned_customer.customer_name + " is now seated at Table " + str(table_number))

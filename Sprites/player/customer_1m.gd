@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-# Restaurant Customer NPC with In-Game Dialogue UI and Table System
+# Restaurant Customer NPC with In-Game Dialogue UI and Walking Movement
 # This script goes on the root node of the NPC scene file
 
 @export var customer_name: String = "Mrs. Anderson"
@@ -17,6 +17,9 @@ var is_talking = false
 var has_ordered = false
 var ready_for_seating = false
 var assigned_table = null
+var is_walking_to_table = false
+var target_position = Vector2.ZERO
+var walking_speed = 160.0
 
 @onready var interaction_area = $InteractionArea
 @onready var interaction_prompt = $InteractionPrompt
@@ -53,7 +56,31 @@ func _ready():
 	else:
 		print("WARNING: DialogueUI not found! Make sure it exists in the main scene.")
 
+func _physics_process(delta):
+	# Handle movement to table
+	if is_walking_to_table and target_position != Vector2.ZERO:
+		var direction = (target_position - global_position).normalized()
+		var distance = global_position.distance_to(target_position)
+		
+		# If close enough to target, stop walking
+		if distance < 10.0:
+			is_walking_to_table = false
+			velocity = Vector2.ZERO
+			print("Customer " + customer_name + " has reached their table!")
+			# Notify the table that customer has arrived
+			if assigned_table and assigned_table.has_method("customer_seated"):
+				assigned_table.customer_seated()
+		else:
+			# Move towards the target
+			velocity = direction * walking_speed
+		
+		move_and_slide()
+
 func _input(event):
+	# Don't allow interaction while walking to table
+	if is_walking_to_table:
+		return
+		
 	# Check for interaction input when player is in range
 	if event.is_action_pressed("interact") and player_in_range and not is_talking:
 		start_dialogue()
@@ -63,7 +90,7 @@ func _input(event):
 func _on_interaction_area_entered(body):
 	if body.name == "Player" or body.is_in_group("player"):
 		player_in_range = true
-		if not has_ordered:
+		if not has_ordered and not is_walking_to_table:
 			show_interaction_prompt()
 
 func _on_interaction_area_exited(body):
@@ -166,3 +193,9 @@ func assign_to_table(table):
 	assigned_table = table
 	ready_for_seating = false
 	print("Customer " + customer_name + " is being seated at table " + str(table.table_number))
+
+# New function to start walking to table
+func walk_to_table(table_position: Vector2):
+	target_position = table_position
+	is_walking_to_table = true
+	print("Customer " + customer_name + " is walking to their table...")
