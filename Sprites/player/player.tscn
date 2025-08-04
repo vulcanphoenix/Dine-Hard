@@ -37,4 +37,5 @@ scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_4ntmi")
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+visible = false
 polygon = PackedVector2Array(17, 16, 16, 16, 16, 58, 23, 62, 23, 65, 20, 67, 19, 68, -15, 69, -18, 66, -18, 63, -13, 59, -13, 15, -15, 12, 19, 13)
