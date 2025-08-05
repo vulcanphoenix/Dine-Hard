@@ -113,7 +113,7 @@ height = 150.0
 script = ExtResource("1_r3shs")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(3.511, 3.476)
+scale = Vector2(4.222, 4.18)
 sprite_frames = SubResource("SpriteFrames_200q6")
 animation = &"idle"
 autoplay = "idle"

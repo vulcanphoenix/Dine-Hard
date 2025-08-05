@@ -1,7 +1,7 @@
 extends Node2D
 
 # Preload NPC scene
-@export var npc_scene: PackedScene
+@export var npc_scene: PackedScene = preload("res://Sprites/player/Customer1M.tscn")
 @export var spawn_interval: float = 60.0
 @export var max_npcs: int = 1
 

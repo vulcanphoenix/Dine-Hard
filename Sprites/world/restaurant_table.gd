@@ -39,7 +39,7 @@ func _on_interaction_area_exited(body):
 
 func show_interaction_prompt():
 	if interaction_prompt:
-		interaction_prompt.text = "Press E to seat customer at Table " + str(table_number)
+		interaction_prompt.text = "Press E to Interact"
 		interaction_prompt.visible = true
 
 func hide_interaction_prompt():
