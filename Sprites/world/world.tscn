@@ -150,7 +150,6 @@ sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable"]
-visible = false
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
 [node name="InteractionArea" type="Area2D" parent="RestaurantTable"]
@@ -185,7 +184,6 @@ sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable3"]
-visible = false
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
 [node name="InteractionArea" type="Area2D" parent="RestaurantTable3"]
@@ -220,8 +218,7 @@ sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable4"]
-visible = false
-position = Vector2(-1.14286, -4.57143)
+position = Vector2(-18.8571, -84.5714)
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
 [node name="InteractionArea" type="Area2D" parent="RestaurantTable4"]
@@ -243,7 +240,7 @@ theme_override_font_sizes/font_size = 10
 text = "Press E to Interact"
 
 [node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable4"]
-position = Vector2(72, 85.1429)
+position = Vector2(41.1429, 38.8571)
 
 [node name="RestaurantTable2" type="StaticBody2D" parent="."]
 position = Vector2(103, 197)

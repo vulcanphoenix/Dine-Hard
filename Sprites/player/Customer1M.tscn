@@ -1,8 +1,13 @@
-[gd_scene load_steps=19 format=3 uid="uid://bamjgdqvuv67b"]
+[gd_scene load_steps=21 format=3 uid="uid://bamjgdqvuv67b"]
 
 [ext_resource type="Texture2D" uid="uid://dbieeam0m5lo0" path="res://Sprites/customers/mafia guy 1.png" id="1_8aq1w"]
 [ext_resource type="Script" uid="uid://600waawf1d8c" path="res://Sprites/player/customer_1m.gd" id="1_r3shs"]
+[ext_resource type="Texture2D" uid="uid://b0gnju87b7jdv" path="res://Sprites/player/mafia guy 1 (2) (1).png" id="2_wmj76"]
 [ext_resource type="Texture2D" uid="uid://cultns3gnsb60" path="res://Sprites/world/mafia guy 1 (1).png" id="2_y3moo"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xnrem"]
+atlas = ExtResource("2_wmj76")
+region = Rect2(0, 0, 58, 63)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wmj76"]
 atlas = ExtResource("2_y3moo")
@@ -54,6 +59,14 @@ region = Rect2(640, 256, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_200q6"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xnrem")
+}],
+"loop": true,
+"name": &"Sitting",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wmj76")
@@ -115,8 +128,7 @@ script = ExtResource("1_r3shs")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(4.222, 4.18)
 sprite_frames = SubResource("SpriteFrames_200q6")
-animation = &"idle"
-autoplay = "idle"
+animation = &"Sitting"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
