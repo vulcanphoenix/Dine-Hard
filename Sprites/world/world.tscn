@@ -142,6 +142,7 @@ tile_set = SubResource("TileSet_ov2xu")
 [node name="RestaurantTable" type="StaticBody2D" parent="."]
 position = Vector2(109, 213)
 scale = Vector2(1.75, 1.75)
+collision_layer = 3
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable"]
@@ -171,15 +172,52 @@ theme_override_font_sizes/font_size = 10
 text = "Press E to Interact"
 
 [node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable"]
-position = Vector2(68, 81.1428)
+position = Vector2(42.8571, 45.1429)
+
+[node name="RestaurantTable2" type="StaticBody2D" parent="."]
+position = Vector2(103, 197)
+scale = Vector2(1.75, 1.75)
+collision_layer = 3
+script = ExtResource("2_lpn8e")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable2"]
+position = Vector2(9.14286, 188)
+sprite_frames = SubResource("SpriteFrames_fn3g3")
+animation = &"clean_table"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable2"]
+position = Vector2(2.85714, 134.857)
+polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
+
+[node name="InteractionArea" type="Area2D" parent="RestaurantTable2"]
+position = Vector2(-64, -149.714)
+scale = Vector2(0.571429, 0.571429)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RestaurantTable2/InteractionArea"]
+visible = false
+light_mask = 0
+position = Vector2(146, 602.999)
+shape = SubResource("RectangleShape2D_6pm3g")
+
+[node name="InteractionPrompt" type="Label" parent="RestaurantTable2"]
+offset_left = -36.0
+offset_top = 131.429
+offset_right = 59.0
+offset_bottom = 148.429
+theme_override_font_sizes/font_size = 10
+text = "Press E to Interact"
+
+[node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable2"]
+position = Vector2(43.4286, 175.429)
 
 [node name="RestaurantTable3" type="StaticBody2D" parent="."]
 position = Vector2(405, 219)
 scale = Vector2(1.75, 1.75)
+collision_layer = 3
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable3"]
-position = Vector2(4.57144, 51.4286)
+position = Vector2(5.71428, 53.7143)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
@@ -205,7 +243,7 @@ theme_override_font_sizes/font_size = 10
 text = "Press E to Interact"
 
 [node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable3"]
-position = Vector2(68, 81.1428)
+position = Vector2(41.7143, 43.4286)
 
 [node name="RestaurantTable4" type="StaticBody2D" parent="."]
 position = Vector2(408, 438)
@@ -213,12 +251,12 @@ scale = Vector2(1.75, 1.75)
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable4"]
-position = Vector2(4.00001, 46.8571)
+position = Vector2(5.71428, 46.8571)
 sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable4"]
-position = Vector2(-18.8571, -84.5714)
+position = Vector2(14.8571, -105.143)
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
 [node name="InteractionArea" type="Area2D" parent="RestaurantTable4"]
@@ -240,43 +278,7 @@ theme_override_font_sizes/font_size = 10
 text = "Press E to Interact"
 
 [node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable4"]
-position = Vector2(41.1429, 38.8571)
-
-[node name="RestaurantTable2" type="StaticBody2D" parent="."]
-position = Vector2(103, 197)
-scale = Vector2(1.75, 1.75)
-script = ExtResource("2_lpn8e")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable2"]
-position = Vector2(8.57143, 188)
-sprite_frames = SubResource("SpriteFrames_fn3g3")
-animation = &"clean_table"
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable2"]
-visible = false
-position = Vector2(2.28574, 131.429)
-polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
-
-[node name="InteractionArea" type="Area2D" parent="RestaurantTable2"]
-position = Vector2(-64, -149.714)
-scale = Vector2(0.571429, 0.571429)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RestaurantTable2/InteractionArea"]
-visible = false
-light_mask = 0
-position = Vector2(146, 602.999)
-shape = SubResource("RectangleShape2D_6pm3g")
-
-[node name="InteractionPrompt" type="Label" parent="RestaurantTable2"]
-offset_left = -36.0
-offset_top = 131.429
-offset_right = 59.0
-offset_bottom = 148.429
-theme_override_font_sizes/font_size = 10
-text = "Press E to Interact"
-
-[node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable2"]
-position = Vector2(76, 217.714)
+position = Vector2(42.8572, 38.8571)
 
 [node name="player" parent="." instance=ExtResource("5_tat8m")]
 position = Vector2(644, 833)
