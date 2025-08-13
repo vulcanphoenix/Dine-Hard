@@ -132,8 +132,8 @@ radius = 23.0
 height = 68.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y3moo"]
-radius = 37.0
-height = 150.0
+radius = 52.0
+height = 198.0
 
 [node name="Customer" type="CharacterBody2D"]
 collision_layer = 6

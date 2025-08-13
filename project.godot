@@ -19,6 +19,10 @@ config/features=PackedStringArray("4.4", "Forward Plus")
 window/size/viewport_width=983
 window/size/viewport_height=918
 
+[editor]
+
+version_control/autoload_on_startup=true
+
 [input]
 
 up={

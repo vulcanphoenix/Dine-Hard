@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=27 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Script" uid="uid://cc4lsf3xrr25m" path="res://Sprites/world/world.gd" id="1_8nwcd"]
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bxnowhrju4y8u" path="res://Sprites/world/Tables/New Piskel-2.png.png" id="2_h5o24"]
 [ext_resource type="Script" uid="uid://cpeg3ajgpws2l" path="res://Sprites/world/restaurant_table.gd" id="2_lpn8e"]
 [ext_resource type="Texture2D" uid="uid://cgjwja0uhb8mt" path="res://Sprites/world/Tables/New Piskel-3.png.png" id="3_mmdvd"]
+[ext_resource type="Texture2D" uid="uid://c46y5tk666iy8" path="res://New Piskel-1.png (1).png" id="3_q4n3e"]
 [ext_resource type="PackedScene" uid="uid://b2w8lm5xe01w" path="res://Sprites/player/player.tscn" id="5_tat8m"]
 [ext_resource type="Script" uid="uid://blkt0xrfjgqyp" path="res://Sprites/world/customer_spawn.gd" id="6_is8iy"]
 [ext_resource type="PackedScene" uid="uid://bamjgdqvuv67b" path="res://Sprites/player/Customer1M.tscn" id="7_3sxfg"]
@@ -76,6 +77,13 @@ texture_region_size = Vector2i(5, 5)
 tile_size = Vector2i(19, 19)
 sources/0 = SubResource("TileSetAtlasSource_fyhu2")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktbyw"]
+size = Vector2(26.25, 8)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6pm3g"]
+radius = 47.0
+height = 108.0
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_fn3g3"]
 animations = [{
 "frames": [{
@@ -138,6 +146,29 @@ tile_set = SubResource("TileSet_4papg")
 [node name="Interactables" type="TileMapLayer" parent="Tilemap_Holder"]
 tile_map_data = PackedByteArray("AAAuAAUAAAAFAQUAAAAlAAUAAADSAAUAAAAuACoAAABsAAUAAAAkACoAAAA4AAUAAAA=")
 tile_set = SubResource("TileSet_ov2xu")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(911, 84)
+shape = SubResource("RectangleShape2D_ktbyw")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D"]
+position = Vector2(909.75, 110)
+scale = Vector2(2.70313, 2.6875)
+texture = ExtResource("3_q4n3e")
+
+[node name="Area2D" type="Area2D" parent="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D/Area2D"]
+position = Vector2(910, 98)
+shape = SubResource("CapsuleShape2D_6pm3g")
+
+[node name="Label" type="Label" parent="StaticBody2D"]
+offset_left = 876.0
+offset_top = 53.0
+offset_right = 948.0
+offset_bottom = 76.0
 
 [node name="RestaurantTable" type="StaticBody2D" parent="."]
 position = Vector2(109, 213)
@@ -256,7 +287,7 @@ sprite_frames = SubResource("SpriteFrames_fn3g3")
 animation = &"clean_table"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="RestaurantTable4"]
-position = Vector2(14.8571, -105.143)
+position = Vector2(-156, -118.286)
 polygon = PackedVector2Array(66.8571, 80.5714, -56.5714, 80.5714, -56, 14.8571, -55.4286, 1.14285, -50.2857, 1.71428, -49.7143, 15.4286, 60, 14.8571, 60.5714, 1.71428, 66.2857, 1.71428, 66.2857, 14.8571)
 
 [node name="InteractionArea" type="Area2D" parent="RestaurantTable4"]
@@ -278,7 +309,7 @@ theme_override_font_sizes/font_size = 10
 text = "Press E to Interact"
 
 [node name="CustomerSeatPosition" type="Marker2D" parent="RestaurantTable4"]
-position = Vector2(42.8572, 38.8571)
+position = Vector2(43.4286, 38.8571)
 
 [node name="player" parent="." instance=ExtResource("5_tat8m")]
 position = Vector2(644, 833)
@@ -290,6 +321,7 @@ script = ExtResource("6_is8iy")
 position = Vector2(942, 839)
 
 [node name="Collision holder" type="Node2D" parent="."]
+position = Vector2(0, 1)
 
 [node name="CounterTop" type="StaticBody2D" parent="Collision holder"]
 visible = false

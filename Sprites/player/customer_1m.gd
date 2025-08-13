@@ -11,12 +11,9 @@ extends CharacterBody2D
 
 # Food ordering system - Italian themed options
 @export var available_foods: Array[String] = [
-	"Spaghetti Carbonara",
 	"Margherita Pizza", 
-	"Chicken Parmigiana",
 	"Fettuccine Alfredo",
 	"Lasagna Bolognese",
-	"Risotto ai Funghi"
 ]
 
 var player_in_range = false
