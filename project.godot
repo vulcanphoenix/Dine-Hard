@@ -14,6 +14,10 @@ config/name="Dine Hard"
 run/main_scene="uid://cwdgdukwo147c"
 config/features=PackedStringArray("4.4", "Forward Plus")
 
+[autoload]
+
+OrderManager="*res://OrderManager.gd"
+
 [display]
 
 window/size/viewport_width=983

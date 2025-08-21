@@ -9,6 +9,7 @@ extends CharacterBody2D
 	"Table for One please",
 ]
 
+
 # Food ordering system - Italian themed options
 @export var available_foods: Array[String] = [
 	"Margherita Pizza", 
@@ -257,6 +258,14 @@ func show_menu_options():
 
 func complete_food_order():
 	current_ordering_state = OrderingState.ORDER_COMPLETE
+	
+	# Add order to the OrderManager system
+	if assigned_table and assigned_table.has_method("get_table_number"):
+		var table_number = assigned_table.get_table_number()
+		OrderManager.add_customer_order(customer_name, selected_food, table_number)
+	else:
+		# Fallback if table doesn't have get_table_number method
+		OrderManager.add_customer_order(customer_name, selected_food, 1)
 	
 	var name_label = dialogue_ui.get_node_or_null("DialogueBox/NameLabel")
 	var text_label = dialogue_ui.get_node_or_null("DialogueBox/DialogueText") 

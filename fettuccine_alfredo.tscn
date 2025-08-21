@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://blhyja4rogdrf"]
+
+[ext_resource type="Texture2D" uid="uid://ccn604d0ru5sf" path="res://Sprites/world/Food-1.png.png" id="1_mnsu0"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aidcn"]
+radius = 60.0
+height = 120.0
+
+[node name="Fettuccine Alfredo" type="Area2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0.999985, 0)
+scale = Vector2(3.30469, 3.33594)
+texture = ExtResource("1_mnsu0")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_aidcn")

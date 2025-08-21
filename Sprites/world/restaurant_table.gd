@@ -144,3 +144,7 @@ func free_table():
 	# Show interaction prompt again if player is nearby
 	if player_in_range:
 		show_interaction_prompt()
+		
+
+func get_table_number() -> int:
+	return table_number

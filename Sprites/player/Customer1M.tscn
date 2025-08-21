@@ -142,7 +142,7 @@ script = ExtResource("1_r3shs")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(4.187, 4.145)
 sprite_frames = SubResource("SpriteFrames_200q6")
-animation = &"Menu"
+animation = &"Sitting"
 autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
