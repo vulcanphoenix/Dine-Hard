@@ -137,6 +137,7 @@ height = 198.0
 
 [node name="Customer" type="CharacterBody2D"]
 collision_layer = 6
+collision_mask = 2
 script = ExtResource("1_r3shs")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

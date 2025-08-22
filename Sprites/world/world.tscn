@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=31 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Script" uid="uid://cc4lsf3xrr25m" path="res://Sprites/world/world.gd" id="1_8nwcd"]
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
@@ -128,7 +128,14 @@ size = Vector2(15, 752.5)
 size = Vector2(985, 29)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_l57vb"]
-size = Vector2(151, 157)
+size = Vector2(151, 116.5)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_6pm3g"]
+b = Vector2(0, 0)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ktbyw"]
+radius = 23.0065
+height = 277.992
 
 [node name="World" type="Node2D" groups=["customers"]]
 script = ExtResource("1_8nwcd")
@@ -155,6 +162,7 @@ tile_set = SubResource("TileSet_ov2xu")
 script = ExtResource("3_6pm3g")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Order_reciever"]
+visible = false
 position = Vector2(911, 84)
 shape = SubResource("RectangleShape2D_ktbyw")
 
@@ -180,6 +188,7 @@ text = "Press E to Interact"
 [node name="RestaurantTable" type="StaticBody2D" parent="."]
 position = Vector2(109, 213)
 scale = Vector2(1.75, 1.75)
+collision_mask = 2
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable"]
@@ -215,6 +224,7 @@ position = Vector2(43.4286, 45.1429)
 [node name="RestaurantTable2" type="StaticBody2D" parent="."]
 position = Vector2(103, 197)
 scale = Vector2(1.75, 1.75)
+collision_mask = 2
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable2"]
@@ -251,6 +261,7 @@ position = Vector2(46.8571, 180)
 [node name="RestaurantTable3" type="StaticBody2D" parent="."]
 position = Vector2(405, 219)
 scale = Vector2(1.75, 1.75)
+collision_mask = 2
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable3"]
@@ -286,6 +297,7 @@ position = Vector2(43.4286, 45.7143)
 [node name="RestaurantTable4" type="StaticBody2D" parent="."]
 position = Vector2(408, 438)
 scale = Vector2(1.75, 1.75)
+collision_mask = 2
 script = ExtResource("2_lpn8e")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="RestaurantTable4"]
@@ -324,7 +336,6 @@ position = Vector2(941, 837)
 
 [node name="player" parent="." instance=ExtResource("5_tat8m")]
 position = Vector2(644, 833)
-collision_mask = 3
 
 [node name="Customer Spawn" type="Node2D" parent="."]
 script = ExtResource("6_is8iy")
@@ -333,6 +344,7 @@ script = ExtResource("6_is8iy")
 position = Vector2(942, 839)
 
 [node name="Collision holder" type="Node2D" parent="."]
+visible = false
 position = Vector2(0, 1)
 
 [node name="CounterTop" type="StaticBody2D" parent="Collision holder"]
@@ -370,7 +382,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/Table1"]
-position = Vector2(384.5, 530)
+position = Vector2(384.5, 509.75)
 shape = SubResource("RectangleShape2D_l57vb")
 
 [node name="Table2" type="StaticBody2D" parent="Collision holder"]
@@ -379,7 +391,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/Table2"]
-position = Vector2(84, 535)
+position = Vector2(84, 515)
 shape = SubResource("RectangleShape2D_l57vb")
 
 [node name="Table3" type="StaticBody2D" parent="Collision holder"]
@@ -388,7 +400,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/Table3"]
-position = Vector2(85, 315)
+position = Vector2(86, 294)
 shape = SubResource("RectangleShape2D_l57vb")
 
 [node name="Table4" type="StaticBody2D" parent="Collision holder"]
@@ -397,7 +409,7 @@ collision_layer = 3
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Collision holder/Table4"]
-position = Vector2(382, 322)
+position = Vector2(382, 302)
 shape = SubResource("RectangleShape2D_l57vb")
 
 [node name="DialogueUI" type="Control" parent="." groups=["dialogue_ui"]]
@@ -462,3 +474,19 @@ offset_bottom = 8.0
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
+
+[node name="KitchenStation" type="StaticBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="KitchenStation"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KitchenStation"]
+shape = SubResource("SegmentShape2D_6pm3g")
+
+[node name="InteractionArea" type="Area2D" parent="KitchenStation"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KitchenStation/InteractionArea"]
+position = Vector2(742, 135)
+rotation = -1.57412
+shape = SubResource("CapsuleShape2D_ktbyw")
+
+[node name="FoodSpawnPoint" type="Marker2D" parent="KitchenStation"]

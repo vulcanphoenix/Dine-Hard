@@ -3,18 +3,156 @@
 [ext_resource type="Texture2D" uid="uid://cfpox4k6arxtj" path="res://Sprites/player/sprite_0.png" id="1_aaof1"]
 
 [sub_resource type="GDScript" id="GDScript_db72c"]
-script/source = "extends CharacterBody2D
+script/source = "# Add this to your existing player script
+extends CharacterBody2D
+
 var speed = 400
+# Food carrying variables
+var carried_food: Array = []
+var max_carry_capacity: int = 3
+
+signal food_delivered(order_id)
 
 func _ready():
 	add_to_group(\"player\")
-	print(\"Player added to group\") 
+	add_to_group(\"waiters\")  # Add this line for food collection
+	print(\"Player added to groups\")
 
 func _physics_process(_delta):
-	var direction = Input.get_vector( \"left\", \"right\", \"up\", \"down\")
+	var direction = Input.get_vector(\"left\", \"right\", \"up\", \"down\")
 	velocity = direction * speed
-	
 	move_and_slide()
+
+func _input(event):
+	# Handle food delivery
+	if event.is_action_pressed(\"interact\"):
+		try_deliver_food()
+	
+	# Optional: Drop food with a different key
+	if event.is_action_pressed(\"drop_food\"):
+		drop_food()
+
+# Called automatically when player touches ready food
+func receive_food(food_item):
+	if carried_food.size() >= max_carry_capacity:
+		print(\"Carrying too much food! Capacity: \", max_carry_capacity)
+		return false
+	
+	# Create visual representation of carried food
+	var carried_food_data = {
+		\"order_id\": food_item.order_id,
+		\"food_type\": food_item.food_type,
+		\"visual\": create_carried_food_visual(food_item.food_type)
+	}
+	
+	carried_food.append(carried_food_data)
+	update_carried_food_visuals()
+	
+	print(\"Now carrying: \", carried_food.size(), \" items\")
+	return true
+
+func create_carried_food_visual(food_type: String) -> Sprite2D:
+	var sprite = Sprite2D.new()
+	sprite.scale = Vector2(0.5, 0.5)  # Make carried food smaller
+	
+	# Simple colored squares for different food types
+	# Replace with actual food sprites when you have them
+	var texture = ImageTexture.new()
+	var image = Image.create(20, 20, false, Image.FORMAT_RGBA8)
+	
+	match food_type:
+		\"burger\":
+			image.fill(Color.BROWN)
+		\"pizza\":
+			image.fill(Color.RED)
+		\"pasta\":
+			image.fill(Color.YELLOW)
+		_:
+			image.fill(Color.WHITE)
+	
+	texture.set_image(image)
+	sprite.texture = texture
+	add_child(sprite)
+	return sprite
+
+func update_carried_food_visuals():
+	# Stack carried food above the player
+	for i in range(carried_food.size()):
+		var visual = carried_food[i].visual
+		visual.position = Vector2(0, -30 - (i * 15))
+
+func try_deliver_food():
+	if carried_food.size() == 0:
+		print(\"No food to deliver!\")
+		return
+	
+	# Look for nearby delivery targets
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsPointQueryParameters2D.new()
+	query.position = global_position
+	query.collision_mask = 8  # Delivery points layer (you can adjust this)
+	
+	# Check in a radius around the player
+	var nearby_bodies = []
+	for angle in range(0, 360, 45):  # Check 8 directions
+		var check_pos = global_position + Vector2.from_angle(deg_to_rad(angle)) * 50
+		query.position = check_pos
+		var result = space_state.intersect_point(query)
+		for collision in result:
+			if collision.collider.is_in_group(\"delivery_points\") or collision.collider.is_in_group(\"customers\"):
+				nearby_bodies.append(collision.collider)
+	
+	# Deliver to first found target
+	if nearby_bodies.size() > 0:
+		deliver_food_to_target(nearby_bodies[0])
+	else:
+		print(\"No delivery target nearby!\")
+
+func deliver_food_to_target(target):
+	if carried_food.size() == 0:
+		return
+	
+	var delivered_food = carried_food.pop_front()
+	
+	# Remove visual
+	if delivered_food.visual:
+		delivered_food.visual.queue_free()
+	
+	print(\"Delivered \", delivered_food.food_type, \" to \", target.name)
+	
+	# Notify order system
+	food_delivered.emit(delivered_food.order_id)
+	if OrderManager.has_method(\"complete_order\"):
+		OrderManager.complete_order(delivered_food.order_id)
+	
+	# Visual feedback
+	show_delivery_success()
+	update_carried_food_visuals()
+
+func show_delivery_success():
+	# Flash green briefly
+	var original_modulate = modulate
+	modulate = Color.GREEN
+	await get_tree().create_timer(0.2).timeout
+	modulate = original_modulate
+
+func drop_food():
+	if carried_food.size() == 0:
+		return
+	
+	var dropped_food = carried_food.pop_back()
+	if dropped_food.visual:
+		dropped_food.visual.queue_free()
+	
+	print(\"Dropped food: \", dropped_food.food_type)
+	update_carried_food_visuals()
+
+# Debug function - call this to see what you're carrying
+func debug_carried_food():
+	print(\"=== CARRIED FOOD ===\")
+	print(\"Count: \", carried_food.size(), \"/\", max_carry_capacity)
+	for food in carried_food:
+		print(\"  - \", food.food_type, \" (Order: \", food.order_id, \")\")
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4ntmi"]
@@ -29,6 +167,8 @@ animations = [{
 }]
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
+collision_layer = 3
+collision_mask = 3
 script = SubResource("GDScript_db72c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cmxgke2ex0bue"]
+[gd_scene load_steps=4 format=3 uid="uid://cmxgke2ex0bue"]
 
+[ext_resource type="Script" uid="uid://c8vnufqgj6ssu" path="res://food.gd" id="1_4up0o"]
 [ext_resource type="Texture2D" uid="uid://ccn604d0ru5sf" path="res://Sprites/world/Food-1.png.png" id="1_bp3w5"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bp3w5"]
@@ -7,11 +8,12 @@ radius = 60.0
 height = 120.0
 
 [node name="Margherita Pizza" type="Area2D"]
+script = ExtResource("1_4up0o")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0.999985, 0)
 scale = Vector2(3.30469, 3.33594)
 texture = ExtResource("1_bp3w5")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." groups=["kitchen_stations", "ready_food"]]
 shape = SubResource("CapsuleShape2D_bp3w5")
