@@ -1,91 +1,164 @@
-# OrderManager.gd - Enhanced version
-extends Node
+# KitchenStation.gd
+# Attach this script to your kitchen station/order terminal node
 
-var active_orders: Dictionary = {}
-var available_stations: Array = []
-var delivery_locations: Dictionary = {}
+extends StaticBody2D
 
-signal order_created(order_data)
-signal order_assigned(order_data, station_id)
-signal order_completed(order_id)
-signal food_ready_for_pickup(food_item, order_id)
+var player_in_range = false
+var is_showing_orders = false
+
+@onready var interaction_area = $InteractionArea  # Area2D for detecting player
+@onready var interaction_prompt = $InteractionPrompt  # Label showing "Press E to place orders"
+@onready var orders_ui = get_tree().current_scene.get_node_or_null("OrdersUI")  # UI for showing orders
+
+# Signal to communicate with cooking stations
+signal orders_placed(orders_array)
 
 func _ready():
-	# Find all kitchen stations and delivery points
-	call_deferred("register_stations_and_delivery_points")
+	# Connect the interaction area signals
+	if interaction_area:
+		interaction_area.body_entered.connect(_on_interaction_area_entered)
+		interaction_area.body_exited.connect(_on_interaction_area_exited)
+	
+	# Hide UI elements initially
+	if interaction_prompt:
+		interaction_prompt.visible = false
+	
+	# Find or create orders UI
+	if not orders_ui:
+		orders_ui = get_tree().current_scene.get_node_or_null("OrdersUI")
+	
+	if orders_ui:
+		orders_ui.visible = false
+	else:
+		print("WARNING: OrdersUI not found! Make sure it exists in the main scene.")
+	
+	# Connect to cooking stations - find all cooking stations in the scene
+	call_deferred("connect_to_cooking_stations")
 
-func register_stations_and_delivery_points():
-	# Register kitchen stations
-	var stations = get_tree().get_nodes_in_group("kitchen_stations")
-	for station in stations:
-		available_stations.append(station.get_instance_id())
-		print("Registered station: ", station.name)
+func connect_to_cooking_stations():
+	# Find all cooking stations (assuming they're in a group called "cooking_stations")
+	var cooking_stations = get_tree().get_nodes_in_group("cooking_stations")
 	
-	# Register delivery locations (tables, serving windows, etc.)
-	var delivery_points = get_tree().get_nodes_in_group("delivery_points")
-	for point in delivery_points:
-		delivery_locations[point.table_id] = point
-		print("Registered delivery point: ", point.table_id)
+	for station in cooking_stations:
+		if station.has_method("receive_order"):
+			# Connect our signal to their receive_order method
+			orders_placed.connect(station.receive_orders)
+	
+	print("Connected to ", cooking_stations.size(), " cooking stations")
 
-func create_order(food_type: String, customer_table: String) -> Dictionary:
-	var order_data = {
-		"id": generate_order_id(),
-		"food_type": food_type,
-		"customer_table": customer_table,
-		"status": "pending",
-		"created_time": Time.get_unix_time_from_system()
-	}
-	
-	active_orders[order_data.id] = order_data
-	print("Created order: ", order_data.id, " for ", food_type)
-	
-	order_created.emit(order_data)
-	assign_order_to_station(order_data)
-	
-	return order_data
+func _input(event):
+	# Check for interaction input when player is in range
+	if event.is_action_pressed("interact") and player_in_range and not is_showing_orders:
+		show_orders()
+	elif event.is_action_pressed("interact") and is_showing_orders:
+		# If viewing orders, pressing E places all orders
+		place_all_orders()
+	elif event.is_action_pressed("ui_cancel") and is_showing_orders:
+		# ESC or similar to close orders view
+		hide_orders()
 
-func assign_order_to_station(order_data: Dictionary):
-	if available_stations.size() == 0:
-		print("No available stations for order: ", order_data.id)
+func _on_interaction_area_entered(body):
+	if body.name == "Player" or body.is_in_group("player"):
+		player_in_range = true
+		show_interaction_prompt()
+
+func _on_interaction_area_exited(body):
+	if body.name == "Player" or body.is_in_group("player"):
+		player_in_range = false
+		hide_interaction_prompt()
+		if is_showing_orders:
+			hide_orders()
+
+func show_interaction_prompt():
+	if interaction_prompt:
+		var pending_count = OrderManager.get_pending_orders().size()
+		if pending_count > 0:
+			interaction_prompt.text = "Press E to place " + str(pending_count) + " orders"
+			interaction_prompt.visible = true
+		else:
+			interaction_prompt.text = "No orders to place"
+			interaction_prompt.visible = true
+
+func hide_interaction_prompt():
+	if interaction_prompt:
+		interaction_prompt.visible = false
+
+func show_orders():
+	is_showing_orders = true
+	hide_interaction_prompt()
+	
+	if orders_ui:
+		orders_ui.visible = true
+		update_orders_display()
+	else:
+		# Fallback: print orders to console if no UI exists
+		print(OrderManager.get_order_summary())
+
+func hide_orders():
+	is_showing_orders = false
+	if orders_ui:
+		orders_ui.visible = false
+	if player_in_range:
+		show_interaction_prompt()
+
+func update_orders_display():
+	if not orders_ui:
 		return
 	
-	# Simple assignment - take first available station
-	var station_id = available_stations[0]
-	available_stations.erase(station_id)
+	# Update the orders list in the UI
+	var orders_list = orders_ui.get_node_or_null("OrdersList")  # VBoxContainer or similar
+	var place_button = orders_ui.get_node_or_null("PlaceOrdersButton")  # Button to place all orders
+	var close_button = orders_ui.get_node_or_null("CloseButton")  # Button to close UI
 	
-	order_data.status = "cooking"
-	order_data.assigned_station = station_id
-	
-	print("Assigned order ", order_data.id, " to station ", station_id)
-	order_assigned.emit(order_data, station_id)
-
-func mark_station_available(station_id: int):
-	if not station_id in available_stations:
-		available_stations.append(station_id)
-		print("Station ", station_id, " is now available")
-
-func get_delivery_location(order_id: String) -> Node2D:
-	if order_id in active_orders:
-		var table_id = active_orders[order_id].customer_table
-		return delivery_locations.get(table_id, null)
-	return null
-
-func complete_order(order_id: String):
-	if order_id in active_orders:
-		active_orders[order_id].status = "completed"
-		print("Order completed: ", order_id)
-		order_completed.emit(order_id)
+	# Clear existing order items
+	if orders_list:
+		for child in orders_list.get_children():
+			child.queue_free()
 		
-		# Remove from active orders after a delay
-		await get_tree().create_timer(2.0).timeout
-		active_orders.erase(order_id)
+		# Add each pending order to the list
+		var pending_orders = OrderManager.get_pending_orders()
+		
+		if pending_orders.size() == 0:
+			var no_orders_label = Label.new()
+			no_orders_label.text = "No pending orders"
+			orders_list.add_child(no_orders_label)
+		else:
+			for order in pending_orders:
+				var order_label = Label.new()
+				order_label.text = "Table " + str(order.table_number) + ": " + order.customer_name + " - " + order.food_item
+				orders_list.add_child(order_label)
+	
+	# Connect buttons if they exist
+	if place_button and not place_button.pressed.is_connected(place_all_orders):
+		place_button.pressed.connect(place_all_orders)
+	
+	if close_button and not close_button.pressed.is_connected(hide_orders):
+		close_button.pressed.connect(hide_orders)
 
-func generate_order_id() -> String:
-	return "ORDER_" + str(Time.get_unix_time_from_system()) + "_" + str(randi() % 1000)
+func place_all_orders():
+	var pending_orders = OrderManager.get_pending_orders()
+	var order_count = pending_orders.size()
+	
+	if order_count > 0:
+		# Send signal to cooking stations with the orders
+		orders_placed.emit(pending_orders)
+		
+		# Let OrderManager know orders have been placed
+		OrderManager.place_all_orders()
+		print("Placed " + str(order_count) + " orders in the kitchen!")
+		
+		# Update display or hide UI
+		if is_showing_orders:
+			update_orders_display()
+		else:
+			hide_orders()
+	else:
+		print("No orders to place!")
 
-# Debug function
-func print_order_status():
-	print("=== ORDER STATUS ===")
-	for order_id in active_orders:
-		var order = active_orders[order_id]
-		print(order_id, ": ", order.food_type, " - Status: ", order.status)
+# Optional: Add individual order placement
+func place_single_order(order: OrderManager.CustomerOrder):
+	# Send single order to cooking stations
+	orders_placed.emit([order])
+	OrderManager.place_order_in_kitchen(order)
+	if is_showing_orders:
+		update_orders_display()

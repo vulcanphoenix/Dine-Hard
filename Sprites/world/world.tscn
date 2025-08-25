@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=4 uid="uid://bbpoj0lm0sg5p"]
+[gd_scene load_steps=32 format=4 uid="uid://bbpoj0lm0sg5p"]
 
 [ext_resource type="Script" uid="uid://cc4lsf3xrr25m" path="res://Sprites/world/world.gd" id="1_8nwcd"]
 [ext_resource type="Texture2D" uid="uid://dg2rkiamm2e3w" path="res://Sprites/world/Tables/New Piskel-1.png.png" id="1_4717r"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b2w8lm5xe01w" path="res://Sprites/player/player.tscn" id="5_tat8m"]
 [ext_resource type="Script" uid="uid://blkt0xrfjgqyp" path="res://Sprites/world/customer_spawn.gd" id="6_is8iy"]
 [ext_resource type="PackedScene" uid="uid://bamjgdqvuv67b" path="res://Sprites/player/Customer1M.tscn" id="7_3sxfg"]
+[ext_resource type="Script" uid="uid://ci5am3p4nsnvp" path="res://Sprites/world/kitchen_station.gd" id="12_ktbyw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mmdvd"]
 texture = ExtResource("1_h5o24")
@@ -78,12 +79,11 @@ texture_region_size = Vector2i(5, 5)
 tile_size = Vector2i(19, 19)
 sources/0 = SubResource("TileSetAtlasSource_fyhu2")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktbyw"]
-size = Vector2(26.25, 8)
-
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6pm3g"]
 radius = 65.0
 height = 164.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ktbyw"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fn3g3"]
 animations = [{
@@ -161,11 +161,6 @@ tile_set = SubResource("TileSet_ov2xu")
 [node name="Order_reciever" type="StaticBody2D" parent="."]
 script = ExtResource("3_6pm3g")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Order_reciever"]
-visible = false
-position = Vector2(911, 84)
-shape = SubResource("RectangleShape2D_ktbyw")
-
 [node name="Sprite2D" type="Sprite2D" parent="Order_reciever"]
 position = Vector2(909.75, 110)
 scale = Vector2(2.70313, 2.6875)
@@ -184,6 +179,10 @@ offset_top = 53.0
 offset_right = 982.0
 offset_bottom = 76.0
 text = "Press E to Interact"
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Order_reciever"]
+shape = SubResource("RectangleShape2D_ktbyw")
 
 [node name="RestaurantTable" type="StaticBody2D" parent="."]
 position = Vector2(109, 213)
@@ -476,6 +475,7 @@ offset_right = 8.0
 offset_bottom = 8.0
 
 [node name="KitchenStation" type="StaticBody2D" parent="."]
+script = ExtResource("12_ktbyw")
 
 [node name="Sprite2D" type="Sprite2D" parent="KitchenStation"]
 
