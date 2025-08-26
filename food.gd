@@ -1,8 +1,8 @@
-# Food.gd - Attach to food item scenes
 extends Area2D
 
 var order_id: String
 var food_type: String
+var customer_name: String = ""  # Added this property
 var ready_for_collection: bool = false
 
 signal collected(collector)
@@ -26,7 +26,7 @@ func _ready():
 	
 	# Visual indicator that food is ready
 	if ready_for_collection:
-		_show_ready_indicator()
+		show_ready_indicator()
 
 func _on_body_entered(body):
 	if not is_instance_valid(body):
@@ -57,9 +57,37 @@ func collect_food(collector):
 	# Remove from scene
 	queue_free()
 
-func _show_ready_indicator():
+func show_ready_indicator():
 	# Add visual effect to show food is ready
 	var tween = create_tween()
 	tween.set_loops()
 	tween.tween_property(self, "modulate", Color.YELLOW, 0.5)
 	tween.tween_property(self, "modulate", Color.WHITE, 0.5)
+
+# Methods for the cooking station to set order information
+func set_order_info(table_num: int, food_name: String, customer: String):
+	order_id = str(table_num)  # Convert int to String to match your order_id type
+	food_type = food_name
+	customer_name = customer
+	ready_for_collection = true
+	show_ready_indicator()
+	print("Food info set: ", food_name, " for ", customer, " at table ", table_num)
+
+# Individual setter methods for flexibility
+func set_order_id(id: int):
+	order_id = str(id)
+
+func set_food_type(type: String):
+	food_type = type
+
+func set_customer_name(name: String):
+	customer_name = name
+
+func set_ready(is_ready: bool):
+	ready_for_collection = is_ready
+	if ready_for_collection:
+		show_ready_indicator()
+
+func make_collectable():
+	ready_for_collection = true
+	show_ready_indicator()

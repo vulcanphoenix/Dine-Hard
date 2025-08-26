@@ -158,7 +158,7 @@ tile_set = SubResource("TileSet_4papg")
 tile_map_data = PackedByteArray("AAAuAAUAAAAFAQUAAAAlAAUAAADSAAUAAAAuACoAAABsAAUAAAAkACoAAAA4AAUAAAA=")
 tile_set = SubResource("TileSet_ov2xu")
 
-[node name="Order_reciever" type="StaticBody2D" parent="."]
+[node name="Order_reciever" type="StaticBody2D" parent="." groups=["kitchen_stations"]]
 script = ExtResource("3_6pm3g")
 
 [node name="Sprite2D" type="Sprite2D" parent="Order_reciever"]
@@ -474,19 +474,23 @@ layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 
-[node name="KitchenStation" type="StaticBody2D" parent="."]
+[node name="KitchenStation" type="StaticBody2D" parent="." groups=["kitchen_stations"]]
+position = Vector2(752, 137)
 script = ExtResource("12_ktbyw")
 
 [node name="Sprite2D" type="Sprite2D" parent="KitchenStation"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KitchenStation"]
+position = Vector2(-3, 0)
 shape = SubResource("SegmentShape2D_6pm3g")
 
 [node name="InteractionArea" type="Area2D" parent="KitchenStation"]
+position = Vector2(1, -1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KitchenStation/InteractionArea"]
-position = Vector2(742, 135)
+position = Vector2(-4.99994, 2.00002)
 rotation = -1.57412
 shape = SubResource("CapsuleShape2D_ktbyw")
 
 [node name="FoodSpawnPoint" type="Marker2D" parent="KitchenStation"]
+position = Vector2(774, 127)

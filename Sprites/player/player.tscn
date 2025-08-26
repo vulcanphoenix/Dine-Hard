@@ -83,7 +83,6 @@ func update_carried_food_visuals():
 
 func try_deliver_food():
 	if carried_food.size() == 0:
-		print(\"No food to deliver!\")
 		return
 	
 	# Look for nearby delivery targets

@@ -39,10 +39,16 @@ func connect_to_cooking_stations():
 	# Find all cooking stations (assuming they're in a group called "cooking_stations")
 	var cooking_stations = get_tree().get_nodes_in_group("cooking_stations")
 	
+	print("DEBUG: Found ", cooking_stations.size(), " cooking stations")
+	
 	for station in cooking_stations:
-		if station.has_method("receive_order"):
-			# Connect our signal to their receive_order method
+		print("DEBUG: Checking station: ", station.name)
+		if station.has_method("receive_orders"):
+			# Connect our signal to their receive_orders method
 			orders_placed.connect(station.receive_orders)
+			print("DEBUG: Connected to station: ", station.name)
+		else:
+			print("DEBUG: Station ", station.name, " doesn't have receive_orders method")
 	
 	print("Connected to ", cooking_stations.size(), " cooking stations")
 
@@ -140,8 +146,12 @@ func place_all_orders():
 	var order_count = pending_orders.size()
 	
 	if order_count > 0:
+		print("DEBUG: About to emit signal with ", order_count, " orders")
+		print("DEBUG: Orders data: ", pending_orders)
+		
 		# Send signal to cooking stations with the orders
 		orders_placed.emit(pending_orders)
+		print("DEBUG: Signal emitted")
 		
 		# Let OrderManager know orders have been placed
 		OrderManager.place_all_orders()

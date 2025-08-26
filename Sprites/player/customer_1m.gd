@@ -48,19 +48,16 @@ var settling_time: float = 0.0  # Will be set randomly when customer sits
 @onready var dialogue_ui = get_tree().current_scene.get_node_or_null("DialogueUI")
 
 func _ready():
-	print("DEBUG: Customer _ready() called for: " + customer_name)
 	
 	# Add to customers group so tables can find this customer
 	add_to_group("customers")
-	print("DEBUG: Customer " + customer_name + " added to customers group")
+	
 	
 	# Verify it was added
 	await get_tree().process_frame  # Wait one frame
 	var customers_in_group = get_tree().get_nodes_in_group("customers")
-	print("DEBUG: Total customers in group after adding: " + str(customers_in_group.size()))
-	for customer in customers_in_group:
-		if customer.has_method("get") and "customer_name" in customer:
-			print("DEBUG: Customer in group: " + str(customer.customer_name))
+	
+	
 	
 	# Connect the interaction area signals
 	interaction_area.body_entered.connect(_on_interaction_area_entered)
@@ -324,8 +321,6 @@ func complete_initial_order():
 # Table system functions
 func is_ready_for_seating() -> bool:
 	var ready = ready_for_seating and assigned_table == null
-	print("DEBUG: Customer " + customer_name + " ready for seating: " + str(ready))
-	print("DEBUG: ready_for_seating = " + str(ready_for_seating) + ", assigned_table = " + str(assigned_table))
 	return ready
 
 func assign_to_table(table):
