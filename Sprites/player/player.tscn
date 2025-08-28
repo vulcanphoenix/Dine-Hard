@@ -3,72 +3,331 @@
 [ext_resource type="Texture2D" uid="uid://cfpox4k6arxtj" path="res://Sprites/player/sprite_0.png" id="1_aaof1"]
 
 [sub_resource type="GDScript" id="GDScript_db72c"]
-script/source = "# Add this to your existing player script
+script/source = "# Enhanced Player script with manual food delivery
 extends CharacterBody2D
 
 var speed = 400
+
 # Food carrying variables
 var carried_food: Array = []
 var max_carry_capacity: int = 3
 
+# Interaction system
+var nearby_customers: Array = []
+var nearby_food_items: Array = []
+var interaction_prompt_visible: bool = false
+
+# UI references
+@onready var interaction_ui = null
+
+# Signals
 signal food_delivered(order_id)
+signal food_picked_up(food_item)
 
 func _ready():
 	add_to_group(\"player\")
-	add_to_group(\"waiters\")  # Add this line for food collection
+	add_to_group(\"waiters\")
 	print(\"Player added to groups\")
+	
+	# Find or create interaction UI
+	setup_interaction_ui()
+
+func setup_interaction_ui():
+	# Look for existing InteractionUI in the scene
+	interaction_ui = get_tree().current_scene.get_node_or_null(\"InteractionUI\")
+	
+	if not interaction_ui:
+		# Create simple interaction prompt if none exists
+		interaction_ui = Control.new()
+		interaction_ui.name = \"InteractionUI\"
+		interaction_ui.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+		
+		var label = Label.new()
+		label.name = \"PromptLabel\"
+		label.text = \"Press E to interact\"
+		label.add_theme_font_size_override(\"font_size\", 16)
+		label.add_theme_color_override(\"font_color\", Color.YELLOW)
+		interaction_ui.add_child(label)
+		
+		get_tree().current_scene.add_child(interaction_ui)
+	
+	# Hide initially
+	interaction_ui.visible = false
 
 func _physics_process(_delta):
 	var direction = Input.get_vector(\"left\", \"right\", \"up\", \"down\")
 	velocity = direction * speed
 	move_and_slide()
+	
+	# Update interaction prompts
+	update_interaction_system()
+
+func update_interaction_system():
+	# Check for nearby food items and customers
+	update_nearby_objects()
+	
+	# Show appropriate interaction prompt
+	show_interaction_prompt()
+
+func update_nearby_objects():
+	# Clear previous arrays
+	nearby_food_items.clear()
+	nearby_customers.clear()
+	
+	# Find nearby food items
+	var food_items = get_tree().get_nodes_in_group(\"ready_food\")
+	for food in food_items:
+		if is_instance_valid(food) and global_position.distance_to(food.global_position) < 60:
+			# Check if food is actually ready for collection
+			var is_ready = false
+			if food.has_method(\"get\") and \"ready_for_collection\" in food:
+				is_ready = food.ready_for_collection
+			elif food.has_method(\"is_food_fresh\"):
+				is_ready = food.is_food_fresh()
+			else:
+				is_ready = true  # Assume ready if no method exists
+			
+			if is_ready:
+				nearby_food_items.append(food)
+	
+	# Find nearby customers
+	var customers = get_tree().get_nodes_in_group(\"customers\")
+	for customer in customers:
+		if is_instance_valid(customer) and global_position.distance_to(customer.global_position) < 60:
+			# Only include customers who can accept delivery
+			if customer.has_method(\"can_accept_delivery\") and customer.can_accept_delivery():
+				nearby_customers.append(customer)
+
+func show_interaction_prompt():
+	var should_show_prompt = false
+	var prompt_text = \"\"
+	
+	# Priority: Food pickup > Food delivery > Other interactions
+	if nearby_food_items.size() > 0 and carried_food.size() < max_carry_capacity:
+		should_show_prompt = true
+		prompt_text = \"Press E to pick up \" + get_food_type_name(nearby_food_items[0])
+	elif nearby_customers.size() > 0 and carried_food.size() > 0:
+		should_show_prompt = true
+		var customer = nearby_customers[0]
+		var customer_name = \"customer\"
+		if customer.has_method(\"get_customer_name\"):
+			customer_name = customer.get_customer_name()
+		elif \"customer_name\" in customer:
+			customer_name = customer.customer_name
+		prompt_text = \"Press E to deliver food to \" + customer_name
+	elif nearby_customers.size() > 0:
+		should_show_prompt = true
+		prompt_text = \"Press E to interact\"
+	
+	# Update UI visibility and text
+	if interaction_ui:
+		interaction_ui.visible = should_show_prompt
+		var label = interaction_ui.get_node_or_null(\"PromptLabel\")
+		if label:
+			label.text = prompt_text
+
+func get_food_type_name(food_item) -> String:
+	if food_item.has_method(\"get\") and \"food_type\" in food_item:
+		return food_item.food_type
+	elif food_item.has_meta(\"food_type\"):
+		return food_item.get_meta(\"food_type\")
+	else:
+		return \"food\"
 
 func _input(event):
-	# Handle food delivery
 	if event.is_action_pressed(\"interact\"):
-		try_deliver_food()
+		handle_interaction()
 	
 	# Optional: Drop food with a different key
 	if event.is_action_pressed(\"drop_food\"):
 		drop_food()
 
-# Called automatically when player touches ready food
-func receive_food(food_item):
+func handle_interaction():
+	# Priority: Food pickup > Food delivery > Customer interaction
+	if nearby_food_items.size() > 0 and carried_food.size() < max_carry_capacity:
+		pickup_food(nearby_food_items[0])
+	elif nearby_customers.size() > 0 and carried_food.size() > 0:
+		deliver_food_to_customer(nearby_customers[0])
+	elif nearby_customers.size() > 0:
+		# Regular customer interaction (for taking orders, etc.)
+		interact_with_customer(nearby_customers[0])
+
+func pickup_food(food_item):
+	print(\"Attempting to pick up food: \", food_item.name)
+	
+	# Check if we can carry more
 	if carried_food.size() >= max_carry_capacity:
-		print(\"Carrying too much food! Capacity: \", max_carry_capacity)
+		show_message(\"Hands full! Can't carry more food.\")
 		return false
 	
-	# Create visual representation of carried food
-	var carried_food_data = {
-		\"order_id\": food_item.order_id,
-		\"food_type\": food_item.food_type,
-		\"visual\": create_carried_food_visual(food_item.food_type)
-	}
+	# Get food information
+	var food_data = extract_food_data(food_item)
+	if food_data.is_empty():
+		show_message(\"Cannot pick up this item.\")
+		return false
 	
-	carried_food.append(carried_food_data)
+	# Create visual representation
+	food_data[\"visual\"] = create_carried_food_visual(food_data.food_type)
+	
+	# Add to carried food
+	carried_food.append(food_data)
 	update_carried_food_visuals()
 	
-	print(\"Now carrying: \", carried_food.size(), \" items\")
+	# Remove the food item from the world
+	food_item.queue_free()
+	
+	# Emit pickup signal
+	food_picked_up.emit(food_item)
+	
+	print(\"Picked up: \", food_data.food_type, \" for \", food_data.customer_name)
+	show_message(\"Picked up \" + food_data.food_type)
+	
 	return true
+
+func extract_food_data(food_item) -> Dictionary:
+	var data = {}
+	
+	# Extract order ID
+	if food_item.has_method(\"get\") and \"order_id\" in food_item:
+		data[\"order_id\"] = food_item.order_id
+	elif food_item.has_meta(\"order_id\"):
+		data[\"order_id\"] = food_item.get_meta(\"order_id\")
+	else:
+		data[\"order_id\"] = \"unknown\"
+	
+	# Extract food type
+	if food_item.has_method(\"get\") and \"food_type\" in food_item:
+		data[\"food_type\"] = food_item.food_type
+	elif food_item.has_meta(\"food_type\"):
+		data[\"food_type\"] = food_item.get_meta(\"food_type\")
+	else:
+		data[\"food_type\"] = \"Unknown Food\"
+	
+	# Extract customer name
+	if food_item.has_method(\"get\") and \"customer_name\" in food_item:
+		data[\"customer_name\"] = food_item.customer_name
+	elif food_item.has_meta(\"customer_name\"):
+		data[\"customer_name\"] = food_item.get_meta(\"customer_name\")
+	else:
+		data[\"customer_name\"] = \"Unknown Customer\"
+	
+	# Extract table number
+	if food_item.has_method(\"get\") and \"table_number\" in food_item:
+		data[\"table_number\"] = food_item.table_number
+	elif food_item.has_meta(\"table_number\"):
+		data[\"table_number\"] = food_item.get_meta(\"table_number\")
+	else:
+		data[\"table_number\"] = 1
+	
+	return data
+
+func deliver_food_to_customer(customer):
+	if carried_food.size() == 0:
+		show_message(\"No food to deliver!\")
+		return false
+	
+	print(\"Attempting to deliver food to customer: \", customer.name)
+	
+	# Find matching food for this customer
+	var matching_food_index = -1
+	var customer_name = \"\"
+	
+	if customer.has_method(\"get_customer_name\"):
+		customer_name = customer.get_customer_name()
+	elif \"customer_name\" in customer:
+		customer_name = customer.customer_name
+	
+	# Look for food that matches this customer
+	for i in range(carried_food.size()):
+		var food = carried_food[i]
+		if food.customer_name == customer_name:
+			matching_food_index = i
+			break
+	
+	# If no exact match, deliver the first food (for testing)
+	if matching_food_index == -1:
+		matching_food_index = 0
+		print(\"No exact food match found, delivering first available food\")
+	
+	var delivered_food = carried_food[matching_food_index]
+	
+	# Check if customer can accept the delivery
+	if customer.has_method(\"can_accept_delivery\"):
+		if not customer.can_accept_delivery():
+			show_message(\"Customer is not ready for delivery!\")
+			return false
+	
+	# Attempt delivery
+	var delivery_successful = false
+	if customer.has_method(\"receive_delivery\"):
+		delivery_successful = customer.receive_delivery(delivered_food)
+	else:
+		# Fallback for customers without receive_delivery method
+		delivery_successful = true
+		print(\"Customer doesn't have receive_delivery method, assuming delivery successful\")
+	
+	if delivery_successful:
+		# Remove visual
+		if delivered_food.visual and is_instance_valid(delivered_food.visual):
+			delivered_food.visual.queue_free()
+		
+		# Remove from carried food
+		carried_food.remove_at(matching_food_index)
+		update_carried_food_visuals()
+		
+		# Emit signal and notify order system
+		food_delivered.emit(delivered_food.order_id)
+		if OrderManager and OrderManager.has_method(\"complete_order\"):
+			OrderManager.complete_order(delivered_food.order_id)
+		
+		show_message(\"Delivered \" + delivered_food.food_type + \" to \" + delivered_food.customer_name)
+		show_delivery_success()
+		
+		print(\"Successfully delivered \", delivered_food.food_type, \" to \", delivered_food.customer_name)
+		return true
+	else:
+		show_message(\"Could not deliver food to customer!\")
+		return false
+
+func interact_with_customer(customer):
+	# This handles non-delivery interactions (taking orders, etc.)
+	print(\"Interacting with customer: \", customer.name)
+	
+	# Trigger customer's interaction system
+	if customer.has_method(\"start_dialogue\"):
+		customer.start_dialogue()
+	elif customer.has_method(\"interact_with_player\"):
+		customer.interact_with_player()
+	else:
+		show_message(\"Customer interaction not implemented\")
 
 func create_carried_food_visual(food_type: String) -> Sprite2D:
 	var sprite = Sprite2D.new()
-	sprite.scale = Vector2(0.5, 0.5)  # Make carried food smaller
+	sprite.scale = Vector2(0.6, 0.6)
 	
-	# Simple colored squares for different food types
-	# Replace with actual food sprites when you have them
 	var texture = ImageTexture.new()
-	var image = Image.create(20, 20, false, Image.FORMAT_RGBA8)
+	var image = Image.create(32, 32, false, Image.FORMAT_RGBA8)
 	
-	match food_type:
-		\"burger\":
-			image.fill(Color.BROWN)
-		\"pizza\":
-			image.fill(Color.RED)
-		\"pasta\":
+	# Create different patterns for different foods
+	match food_type.to_lower():
+		\"margherita pizza\", \"pizza\":
+			image.fill(Color.ORANGE)
+			# Add red spots for pepperoni
+			for i in range(5):
+				var px = randi() % 24 + 4
+				var py = randi() % 24 + 4
+				image.set_pixel(px, py, Color.RED)
+		\"lasagna bolognese\", \"lasagna\":
+			image.fill(Color.ORANGE_RED)
+		\"fettuccine alfredo\", \"pasta\", \"fettuccine\":
 			image.fill(Color.YELLOW)
-		_:
-			image.fill(Color.WHITE)
+	
+	# Add border for visibility
+	for i in range(32):
+		image.set_pixel(i, 0, Color.BLACK)
+		image.set_pixel(i, 31, Color.BLACK)
+		image.set_pixel(0, i, Color.BLACK)
+		image.set_pixel(31, i, Color.BLACK)
 	
 	texture.set_image(image)
 	sprite.texture = texture
@@ -76,82 +335,76 @@ func create_carried_food_visual(food_type: String) -> Sprite2D:
 	return sprite
 
 func update_carried_food_visuals():
-	# Stack carried food above the player
 	for i in range(carried_food.size()):
 		var visual = carried_food[i].visual
-		visual.position = Vector2(0, -30 - (i * 15))
+		if is_instance_valid(visual):
+			var base_offset = Vector2(0, -40 - (i * 18))
+			var side_offset = sin(i * 0.5) * 5
+			visual.position = base_offset + Vector2(side_offset, 0)
+			visual.rotation_degrees = randf_range(-5, 5)
+	
+	# Update capacity indicator
+	update_carry_capacity_indicator()
 
-func try_deliver_food():
-	if carried_food.size() == 0:
-		return
+func update_carry_capacity_indicator():
+	var old_indicator = get_node_or_null(\"CarryIndicator\")
+	if old_indicator:
+		old_indicator.queue_free()
 	
-	# Look for nearby delivery targets
-	var space_state = get_world_2d().direct_space_state
-	var query = PhysicsPointQueryParameters2D.new()
-	query.position = global_position
-	query.collision_mask = 8  # Delivery points layer (you can adjust this)
-	
-	# Check in a radius around the player
-	var nearby_bodies = []
-	for angle in range(0, 360, 45):  # Check 8 directions
-		var check_pos = global_position + Vector2.from_angle(deg_to_rad(angle)) * 50
-		query.position = check_pos
-		var result = space_state.intersect_point(query)
-		for collision in result:
-			if collision.collider.is_in_group(\"delivery_points\") or collision.collider.is_in_group(\"customers\"):
-				nearby_bodies.append(collision.collider)
-	
-	# Deliver to first found target
-	if nearby_bodies.size() > 0:
-		deliver_food_to_target(nearby_bodies[0])
-	else:
-		print(\"No delivery target nearby!\")
-
-func deliver_food_to_target(target):
-	if carried_food.size() == 0:
-		return
-	
-	var delivered_food = carried_food.pop_front()
-	
-	# Remove visual
-	if delivered_food.visual:
-		delivered_food.visual.queue_free()
-	
-	print(\"Delivered \", delivered_food.food_type, \" to \", target.name)
-	
-	# Notify order system
-	food_delivered.emit(delivered_food.order_id)
-	if OrderManager.has_method(\"complete_order\"):
-		OrderManager.complete_order(delivered_food.order_id)
-	
-	# Visual feedback
-	show_delivery_success()
-	update_carried_food_visuals()
+	if carried_food.size() > 0:
+		var label = Label.new()
+		label.name = \"CarryIndicator\"
+		label.text = str(carried_food.size()) + \"/\" + str(max_carry_capacity)
+		label.position = Vector2(-15, -70)
+		label.add_theme_font_size_override(\"font_size\", 12)
+		
+		if carried_food.size() >= max_carry_capacity:
+			label.add_theme_color_override(\"font_color\", Color.RED)
+		elif carried_food.size() >= max_carry_capacity * 0.7:
+			label.add_theme_color_override(\"font_color\", Color.ORANGE)
+		else:
+			label.add_theme_color_override(\"font_color\", Color.GREEN)
+		
+		add_child(label)
 
 func show_delivery_success():
-	# Flash green briefly
 	var original_modulate = modulate
 	modulate = Color.GREEN
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.3).timeout
 	modulate = original_modulate
+
+func show_message(message: String):
+	print(\"Player Message: \", message)
+	# You can enhance this to show UI messages to the player
+	# For now, it just prints to console
 
 func drop_food():
 	if carried_food.size() == 0:
+		show_message(\"No food to drop!\")
 		return
 	
 	var dropped_food = carried_food.pop_back()
-	if dropped_food.visual:
+	if dropped_food.visual and is_instance_valid(dropped_food.visual):
 		dropped_food.visual.queue_free()
 	
-	print(\"Dropped food: \", dropped_food.food_type)
+	show_message(\"Dropped \" + dropped_food.food_type)
 	update_carried_food_visuals()
 
-# Debug function - call this to see what you're carrying
+# Debug functions
 func debug_carried_food():
-	print(\"=== CARRIED FOOD ===\")
+	print(\"=== CARRIED FOOD DEBUG ===\")
 	print(\"Count: \", carried_food.size(), \"/\", max_carry_capacity)
 	for food in carried_food:
-		print(\"  - \", food.food_type, \" (Order: \", food.order_id, \")\")
+		print(\"  - \", food.food_type, \" for \", food.customer_name, \" (Order: \", food.order_id, \")\")
+
+func debug_nearby_objects():
+	print(\"=== NEARBY OBJECTS DEBUG ===\")
+	print(\"Nearby Food Items: \", nearby_food_items.size())
+	for food in nearby_food_items:
+		print(\"  - \", food.name)
+	print(\"Nearby Customers: \", nearby_customers.size())
+	for customer in nearby_customers:
+		print(\"  - \", customer.name)
 "
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_4ntmi"]

@@ -494,3 +494,6 @@ shape = SubResource("CapsuleShape2D_ktbyw")
 
 [node name="FoodSpawnPoint" type="Marker2D" parent="KitchenStation"]
 position = Vector2(774, 127)
+
+[node name="PaymentCounter" type="Node2D" parent="."]
+position = Vector2(639, 683)
